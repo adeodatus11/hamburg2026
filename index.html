@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Bold Partnerships and New Horizons — COVE Poland / WIN4SMEs</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:  #1a2b5e;
+  --blue:  #0077cc;
+  --lblue: #00a3e0;
+  --gold:  #e8a020;
+  --bg:    #f8f9fc;
+  --card:  #ffffff;
+  --muted: #3a5085;
+  --line:  #dde4f0;
+  --shadow: 0 2px 16px rgba(0,0,0,0.07);
+  --bar-h:  clamp(48px, 7vh, 64px);
+  --foot-h: clamp(34px, 5vh, 42px);
+  --sv:     clamp(10px, 2.2vh, 26px);
+  --sh:     clamp(18px, 4vw, 60px);
+}
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  color: var(--navy);
+  user-select: none;
+}
+
+/* ── PROGRESS BAR ── */
+#progress-bar {
+  position: fixed; top: 0; left: 0; height: 4px;
+  background: linear-gradient(90deg, var(--blue), var(--gold));
+  width: 7.69%; transition: width 0.4s ease; z-index: 1000;
+}
+
+/* ── LOGO BAR ── */
+#logo-bar {
+  position: fixed; top: 4px; left: 0; right: 0;
+  height: var(--bar-h);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(14px, 3vw, 36px);
+  background: rgba(248,249,252,0.97);
+  border-bottom: 1px solid var(--line); z-index: 900;
+}
+#logo-bar img {
+  height: clamp(28px, 5vh, 46px); width: auto;
+  object-fit: contain; mix-blend-mode: multiply;
+}
+#logo-bar .cove-logo     { mix-blend-mode: normal; }
+#logo-bar .win4smes-logo { height: clamp(34px, 6.2vh, 58px); }
+
+/* ── CANVAS ── */
+#bg-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+
+/* ── SLIDES CONTAINER ── */
+#slides {
+  position: fixed;
+  top: calc(var(--bar-h) + 4px);
+  bottom: var(--foot-h);
+  left: 0; right: 0; z-index: 10;
+}
+
+/* ── SLIDE BASE ── */
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: var(--sv) var(--sh);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+  overflow: hidden;
+}
+.slide.active { opacity: 1; pointer-events: all; }
+
+/* ── VIEW TRANSITIONS API (Chrome/Safari 18+) ── */
+/* Diagonal clip-path wipe */
+@keyframes wipeOutLeft  { to   { clip-path: polygon(0 0,0 0,0 100%,0 100%); } }
+@keyframes wipeInRight  { from { clip-path: polygon(100% 0,100% 0,100% 100%,100% 100%); } }
+@keyframes wipeOutRight { to   { clip-path: polygon(100% 0,100% 0,100% 100%,100% 100%); } }
+@keyframes wipeInLeft   { from { clip-path: polygon(0 0,0 0,0 100%,0 100%); } }
+/* Circle reveal for key slides */
+@keyframes circleOut { to   { clip-path: circle(0% at 50% 50%); opacity: 0; } }
+@keyframes circleIn  { from { clip-path: circle(0% at 50% 50%); } to { clip-path: circle(150% at 50% 50%); } }
+
+[data-dir="fwd"]::view-transition-old(root) { animation: wipeOutLeft  0.38s cubic-bezier(0.7,0,0.3,1) both; }
+[data-dir="fwd"]::view-transition-new(root) { animation: wipeInRight  0.38s cubic-bezier(0.7,0,0.3,1) both; }
+[data-dir="bwd"]::view-transition-old(root) { animation: wipeOutRight 0.38s cubic-bezier(0.7,0,0.3,1) both; }
+[data-dir="bwd"]::view-transition-new(root) { animation: wipeInLeft   0.38s cubic-bezier(0.7,0,0.3,1) both; }
+[data-dir="key"]::view-transition-old(root) { animation: circleOut 0.35s ease both; }
+[data-dir="key"]::view-transition-new(root) { animation: circleIn  0.52s cubic-bezier(0.2,0,0,1) both; }
+
+/* Title morph — slides in from same direction as wipe */
+.slide.active .slide-title,
+.slide.active .big-title { view-transition-name: slide-title; }
+[data-dir="fwd"]::view-transition-old(slide-title) { animation: wipeOutLeft  0.28s ease both; }
+[data-dir="fwd"]::view-transition-new(slide-title) { animation: wipeInRight  0.38s ease 0.06s both; }
+[data-dir="bwd"]::view-transition-old(slide-title) { animation: wipeOutRight 0.28s ease both; }
+[data-dir="bwd"]::view-transition-new(slide-title) { animation: wipeInLeft   0.38s ease 0.06s both; }
+[data-dir="key"]::view-transition-old(slide-title) { animation: circleOut 0.28s ease both; }
+[data-dir="key"]::view-transition-new(slide-title) { animation: circleIn  0.48s ease 0.08s both; }
+
+/* Fallback class-based transitions */
+.slide.active.ef { animation: wipeInRight 0.38s cubic-bezier(0.7,0,0.3,1) both; }
+.slide.active.eb { animation: wipeInLeft  0.38s cubic-bezier(0.7,0,0.3,1) both; }
+.slide.active.ek { animation: circleIn   0.52s cubic-bezier(0.2,0,0,1) both; }
+
+/* ── CONTENT ENTRY ANIMATIONS ── */
+@keyframes fid { from { opacity:0; transform:translateY(-12px); } to { opacity:1; transform:none; } }
+@keyframes fiu {
+  0%   { opacity:0; transform:translateY(10px); }
+  65%  { opacity:1; transform:translateY(-2px) scale(1.012); }
+  100% { opacity:1; transform:none; }
+}
+@keyframes fis { from { opacity:0; transform:scale(0.94);       } to { opacity:1; transform:none; } }
+@keyframes accentReveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0% 0 0); } }
+.slide.active .accent-line { animation: accentReveal 0.55s cubic-bezier(0.2,0,0,1) 0.12s both; }
+
+.slide.active .at { animation: fid 0.4s ease both; }
+.slide.active .as { animation: fiu 0.36s ease 0.1s  both; }
+.slide.active .a1 { animation: fiu 0.36s ease 0.16s both; }
+.slide.active .a2 { animation: fiu 0.36s ease 0.24s both; }
+.slide.active .a3 { animation: fiu 0.36s ease 0.32s both; }
+.slide.active .a4 { animation: fiu 0.36s ease 0.40s both; }
+.slide.active .a5 { animation: fiu 0.36s ease 0.48s both; }
+.slide.active .a6 { animation: fiu 0.36s ease 0.56s both; }
+.slide.active .as2 { animation: fis 0.5s ease 0.2s both; }
+
+/* ── NETWORK SVG ANIMATIONS ── */
+@keyframes drawStroke { to { stroke-dashoffset: 0; } }
+@keyframes netPop { from { opacity:0; transform:scale(0.8); } to { opacity:1; transform:none; } }
+
+/* ── 3D CARD FLIP ── */
+@keyframes cardFlip {
+  from { opacity: 0.15; transform: perspective(700px) rotateY(-85deg) scale(0.9); }
+  to   { opacity: 1;    transform: perspective(700px) rotateY(0deg)   scale(1);   }
+}
+/* prevent the existing a1 fadeInUp from fighting the flip */
+#slide-3 .card-grid, #slide-8 .card-grid { animation: none !important; opacity: 1 !important; transform: none !important; }
+#slide-3 .inst-card, #slide-8 .card { opacity: 0; }
+#slide-3.active .inst-card, #slide-8.active .card { opacity: 1; }
+
+/* ── TYPOGRAPHY ── */
+.slide-title {
+  font-size: clamp(1.45rem, 2.6vw, 2.55rem);
+  font-weight: 700; color: var(--navy);
+  text-align: center; line-height: 1.2; margin-bottom: 4px;
+}
+.big-title {
+  font-size: clamp(1.7rem, 3.4vw, 2.9rem);
+  font-weight: 800;
+  text-align: center; line-height: 1.15; max-width: 820px;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 55%, #0099dd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.big-sub {
+  font-size: clamp(0.88rem, 1.25vw, 1.1rem);
+  color: var(--muted); text-align: center;
+  margin: 8px 0 20px; line-height: 1.65; max-width: 620px;
+}
+.slide-sub {
+  font-size: clamp(0.8rem, 1.05vw, 0.98rem);
+  color: var(--muted); text-align: center; margin-bottom: 16px; line-height: 1.5;
+}
+.section-label {
+  font-size: clamp(0.6rem, 0.85vw, 0.72rem);
+  font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 6px; text-align: center;
+}
+.accent-line {
+  width: 42px; height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--gold));
+  border-radius: 2px; margin: 0 auto clamp(12px, 2vh, 18px);
+}
+
+/* ── BULLET LIST ── */
+.pt-list { list-style: none; width: 100%; max-width: 700px; }
+.pt-list li {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: clamp(6px, 1vh, 9px) 0;
+  border-bottom: 1px solid var(--line);
+  font-size: clamp(0.88rem, 1.25vw, 1.08rem);
+  color: var(--navy); line-height: 1.45;
+}
+.pt-list li:last-child { border-bottom: none; }
+.pt-list li::before {
+  content: ''; flex-shrink: 0;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold); margin-top: 7px;
+}
+
+/* ── CARD GRID ── */
+.card-grid { display: grid; gap: clamp(10px, 1.4vw, 14px); width: 100%; max-width: 880px; }
+.cg3 { grid-template-columns: repeat(3,1fr); }
+.cg4 { grid-template-columns: repeat(4,1fr); }
+.card {
+  background: var(--card); border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: clamp(12px, 1.6vh, 18px) clamp(12px, 1.8vw, 20px);
+  border-top: 3px solid var(--blue);
+}
+.card-icon  { font-size: clamp(1.3rem, 2vw, 1.65rem); margin-bottom: 6px; }
+.card-title { font-size: clamp(0.76rem, 0.95vw, 0.86rem); font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.card-body  { font-size: clamp(0.7rem, 0.88vw, 0.8rem); color: var(--muted); line-height: 1.4; }
+
+/* ── KEY BOX ── */
+@keyframes keyGlow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(26,43,94,0.18); }
+  50%       { box-shadow: 0 4px 44px rgba(0,119,204,0.32), 0 0 0 4px rgba(0,119,204,0.07); }
+}
+.key-box {
+  background: linear-gradient(135deg, var(--navy) 0%, #1e3a8a 100%);
+  color: #fff; border-radius: 12px;
+  padding: clamp(12px, 1.8vh, 18px) clamp(16px, 2.5vw, 28px);
+  text-align: center;
+  font-size: clamp(0.86rem, 1.15vw, 1.02rem);
+  line-height: 1.6; max-width: 800px; width: 100%;
+  animation: keyGlow 3s ease-in-out infinite;
+}
+.key-box strong { color: #ffd080; font-style: normal; }
+.key-box em { font-size: 0.88em; opacity: 0.82; }
+
+/* ── TWO-COL ── */
+.two-col {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(18px, 3vw, 36px);
+  width: 100%; max-width: 940px; align-items: start;
+}
+
+/* ── PARTNER LOGOS — banner row (slides 1, 3, 12, 13) ── */
+.p-logos {
+  display: flex; flex-wrap: wrap; gap: clamp(10px, 1.5vw, 16px);
+  align-items: center; justify-content: center;
+}
+.p-logos img {
+  height: clamp(32px, 5vh, 50px); width: auto;
+  object-fit: contain; mix-blend-mode: multiply;
+}
+.p-logos .dir-logo { height: clamp(44px, 7vh, 68px); }
+.p-logo-card .dir-logo { max-height: clamp(58px, 9.5vh, 84px); }
+
+/* ── PARTNER LOGOS — card column (slide 2) ── */
+.p-logo-cards { display: flex; flex-direction: column; gap: clamp(10px, 1.6vh, 14px); }
+.p-logo-card {
+  background: white; border-radius: 10px;
+  padding: clamp(10px, 1.8vh, 16px) clamp(14px, 2.2vw, 22px);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 1px 10px rgba(0,0,0,0.07);
+  border-left: 3px solid var(--line);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  min-height: clamp(60px, 9vh, 90px);
+}
+.p-logo-card:hover { border-left-color: var(--blue); box-shadow: 0 3px 16px rgba(0,0,0,0.1); }
+.p-logo-card img {
+  max-height: clamp(46px, 7.5vh, 70px);
+  max-width: 100%;
+  width: auto; object-fit: contain; mix-blend-mode: multiply;
+}
+
+/* ── INSTITUTION CARDS (slide 3) ── */
+.inst-card {
+  background: var(--card); border-radius: 12px;
+  padding: clamp(12px, 1.8vh, 20px) clamp(12px, 1.8vw, 20px);
+  text-align: center; box-shadow: var(--shadow);
+  border-bottom: 3px solid var(--lblue);
+  display: flex; flex-direction: column; align-items: center;
+}
+.inst-icon { font-size: clamp(1.5rem, 2.4vw, 2rem); margin-bottom: 6px; }
+.inst-name { font-size: clamp(0.8rem, 1.05vw, 0.9rem); font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.inst-desc { font-size: clamp(0.7rem, 0.88vw, 0.78rem); color: var(--muted); line-height: 1.4; }
+
+/* ── SPLIT COL (slide 5) ── */
+.split-col { display: flex; flex-direction: column; gap: 8px; }
+.split-col h3 { font-size: clamp(0.86rem, 1.05vw, 0.98rem); font-weight: 700; color: var(--navy); margin-bottom: 5px; }
+.split-col ul { list-style: none; }
+.split-col ul li {
+  font-size: clamp(0.78rem, 0.98vw, 0.9rem); color: var(--muted);
+  padding: clamp(4px, 0.7vh, 5px) 0 clamp(4px, 0.7vh, 5px) 14px;
+  border-bottom: 1px solid var(--line); position: relative;
+}
+.split-col ul li:last-child { border-bottom: none; }
+.split-col ul li::before { content:'›'; position:absolute; left:0; color:var(--gold); font-weight:700; }
+.accent-col {
+  background: linear-gradient(135deg, #eef6ff, #fef9ec);
+  border-radius: 12px;
+  padding: clamp(12px, 1.8vh, 18px) clamp(12px, 1.8vw, 18px);
+  border-left: 4px solid var(--gold);
+}
+
+/* ── DIGITAL FLOW SVG (slide 6) ── */
+.flow-svg {
+  width: 100%; max-width: 680px;
+  height: clamp(70px, 12vh, 100px);
+  overflow: visible; margin-bottom: clamp(10px, 1.5vh, 16px);
+}
+@keyframes flowDraw { to { stroke-dashoffset: 0; } }
+@keyframes flowPop  { to { opacity: 1; } }
+
+/* ── DIGITAL FLOW (slide 6) ── */
+.d-flow {
+  display: flex; align-items: center; gap: 8px;
+  padding: clamp(10px, 1.5vh, 14px) clamp(14px, 2.2vw, 20px);
+  background: var(--card); border-radius: 10px;
+  box-shadow: var(--shadow); max-width: 680px; width: 100%; margin-bottom: 16px;
+}
+.d-flow-item { text-align: center; flex: 1; }
+.d-flow-icon  { font-size: clamp(1.1rem, 1.8vw, 1.5rem); }
+.d-flow-label { font-size: clamp(0.62rem, 0.85vw, 0.74rem); color: var(--muted); margin-top: 3px; }
+.d-arrow { color: var(--gold); font-size: clamp(1rem, 1.4vw, 1.2rem); }
+
+/* ── NETWORK SLIDE 7 ── */
+.net-wrap { width:100%; max-width: 580px; flex-shrink:0; }
+.net-wrap svg { width:100%; height:auto; max-height: clamp(180px, 38vh, 320px); }
+.mini-pt-grid {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: clamp(8px, 1.2vw, 12px); width:100%; max-width: 900px;
+}
+.mini-pt {
+  background: white; border-radius: 9px;
+  padding: clamp(8px, 1.2vh, 12px) clamp(10px, 1.4vw, 14px);
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  border-left: 3px solid var(--blue);
+  font-size: clamp(0.75rem, 0.98vw, 0.88rem); color: var(--navy); line-height: 1.4;
+  font-weight: 500;
+}
+
+/* ── TRANSFER LIST (slide 10) ── */
+.tr-list { display: flex; flex-direction: column; gap: clamp(6px, 1vh, 9px); width: 100%; max-width: 660px; }
+.tr-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: clamp(8px, 1.2vh, 11px) 16px;
+  background: var(--card); border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  font-size: clamp(0.82rem, 1.05vw, 0.96rem);
+}
+.tr-from { font-weight: 600; color: var(--navy); min-width: 190px; text-align: right; }
+.tr-arr  { color: var(--gold); font-size: clamp(0.95rem, 1.3vw, 1.15rem); flex-shrink: 0; }
+.tr-to   { color: var(--muted); }
+
+/* ── TIMELINE (slide 9) ── */
+.tl { display:flex; flex-direction:column; width:100%; max-width:680px; position:relative; }
+.tl::before {
+  content:''; position:absolute;
+  left:20px; top:20px; bottom:20px;
+  width:2px; background:linear-gradient(180deg,var(--blue),var(--gold));
+}
+.tl-item { display:flex; align-items:flex-start; gap:12px; padding: clamp(5px, 0.8vh, 8px) 0; }
+.tl-dot {
+  flex-shrink:0; width:clamp(36px,5vh,42px); height:clamp(36px,5vh,42px);
+  border-radius:50%; background:var(--card); border:2px solid var(--blue);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; color:var(--blue); font-size:clamp(0.78rem,1.05vw,0.94rem);
+  z-index:1; box-shadow:0 0 0 4px var(--bg);
+}
+.tl-body  { padding-top: 8px; }
+.tl-label { font-weight:600; color:var(--navy); font-size:clamp(0.83rem,1.05vw,0.95rem); }
+.tl-desc  { font-size:clamp(0.7rem,0.88vw,0.8rem); color:var(--muted); margin-top:2px; }
+
+/* ── DISCUSSION QUESTIONS ── */
+.q-list { display:flex; flex-direction:column; gap:clamp(9px,1.3vh,12px); width:100%; max-width:740px; }
+.q-item {
+  display:flex; gap:13px; align-items:flex-start;
+  background:var(--card); border-radius:10px;
+  padding: clamp(10px,1.4vh,13px) clamp(13px,1.8vw,18px);
+  box-shadow:0 1px 8px rgba(0,0,0,0.06); border-left:4px solid var(--gold);
+}
+.q-num  { font-weight:700; color:var(--gold); font-size:clamp(0.9rem,1.2vw,1.05rem); flex-shrink:0; }
+.q-text { font-size:clamp(0.83rem,1.05vw,0.95rem); color:var(--navy); line-height:1.45; }
+
+/* ── OPEN FLOOR (slide 12) ── */
+.mic-circle {
+  width: clamp(80px,13vw,130px); height: clamp(80px,13vw,130px);
+  background: linear-gradient(135deg, #e4f2ff, #fff7e0);
+  border-radius: 50%; border: 2px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(2.2rem,5vw,4rem);
+  box-shadow: 0 6px 28px rgba(0,119,204,0.12);
+  margin-bottom: clamp(14px,2.2vh,20px);
+}
+.open-text {
+  font-size: clamp(0.96rem,1.4vw,1.2rem);
+  color: var(--muted); line-height: 1.7; text-align: center; max-width: 600px;
+  margin-bottom: clamp(12px,1.8vh,18px);
+}
+.backup-hint {
+  font-size: clamp(0.68rem,0.85vw,0.78rem); color: #b0bece; text-align: center;
+}
+kbd {
+  background:#eef2f8; border:1px solid #ccd6e8; border-radius:4px;
+  padding:1px 6px; font-size:0.72em; font-family:inherit; color:var(--muted);
+}
+
+/* ── UTILITY ── */
+.hl-gold { color:var(--gold); font-weight:700; }
+.hl-blue { color:var(--blue); font-weight:700; }
+.pwr-logo { mix-blend-mode:normal !important; }
+
+/* ── PER-SLIDE BACKGROUND DECORATION ── */
+.slide-bg-deco {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+
+/* ── WORD REVEAL (slide 11) ── */
+@keyframes revWord { to { clip-path: inset(0 0% 0 0); } }
+.krev { display: inline; clip-path: inset(0 100% 0 0); }
+#slide-11.active .krev {
+  animation: revWord 0.45s cubic-bezier(0.2,0,0,1) calc(var(--kd) * 0.07s + 0.65s) both;
+}
+
+/* ── EU DISCLAIMER ── */
+.eu-disclaimer {
+  font-size: clamp(0.58rem, 0.75vw, 0.68rem);
+  color: #8a9bbf; line-height: 1.55;
+  text-align: center; max-width: 720px;
+  margin-top: clamp(10px, 1.6vh, 16px);
+  font-style: italic;
+}
+
+/* ── FOOTER ── */
+#footer {
+  position:fixed; bottom:0; left:0; right:0;
+  height:var(--foot-h);
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 0 clamp(14px,3vw,36px);
+  border-top:1px solid var(--line);
+  background:rgba(248,249,252,0.97); z-index:900;
+}
+#slide-counter { font-size:clamp(0.68rem,0.88vw,0.8rem); color:var(--muted); font-weight:500; }
+#nav-hint      { font-size:clamp(0.62rem,0.82vw,0.74rem); color:#9cacc8; transition:opacity 0.6s; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 820px) {
+  .two-col       { grid-template-columns:1fr; gap:14px; }
+  .cg3           { grid-template-columns:1fr; }
+  .cg4           { grid-template-columns:1fr 1fr; }
+  .mini-pt-grid  { grid-template-columns:1fr 1fr; }
+  .tr-from       { min-width:120px; }
+  .p-logo-cards  { flex-direction:row; flex-wrap:wrap; justify-content:center; }
+}
+@media (max-width: 480px) {
+  .cg4          { grid-template-columns:1fr; }
+  .mini-pt-grid { grid-template-columns:1fr; }
+  .d-flow       { flex-wrap:wrap; justify-content:center; }
+  .tr-item      { flex-direction:column; align-items:flex-start; gap:4px; }
+  .tr-from      { text-align:left; min-width:0; }
+}
+@media (max-height: 560px) {
+  :root { --bar-h:44px; --foot-h:30px; --sv:6px; --sh:20px; }
+  .accent-line  { margin-bottom:10px; }
+  .tl::before   { top:18px; bottom:18px; }
+}
+
+/* ── LANGUAGE SWITCHER ── */
+#lang-switch {
+  display: flex; align-items: center; gap: 6px;
+  margin-left: auto;
+}
+#lang-select {
+  appearance: none; -webkit-appearance: none;
+  background: rgba(248,249,252,0.95);
+  border: 1px solid #dde4f0;
+  border-radius: 6px;
+  color: #1a2b5e;
+  font-size: clamp(0.62rem, 0.85vw, 0.75rem);
+  font-family: inherit;
+  padding: 2px 22px 2px 8px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%231a2b5e' opacity='.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  outline: none;
+  transition: border-color 0.2s;
+}
+#lang-select:focus { border-color: #0077cc; }
+
+
+/* ── SITE PREVIEW ── */
+.site-preview {
+  display: flex; align-items: center; gap: clamp(10px,1.6vw,20px);
+  margin-top: clamp(8px,1.2vh,14px);
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  max-width: 700px;
+  text-decoration: none;
+  transition: box-shadow 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+.site-preview:hover { box-shadow: 0 4px 24px rgba(0,119,204,0.18); transform: translateY(-2px); }
+.site-preview img {
+  width: clamp(160px,22vw,260px);
+  height: auto;
+  object-fit: cover;
+  flex-shrink: 0;
+  border-right: 1px solid var(--line);
+  mix-blend-mode: normal !important;
+}
+.site-preview-info {
+  padding: clamp(8px,1.2vh,14px) clamp(10px,1.6vw,18px);
+  min-width: 0;
+}
+.site-preview-label {
+  font-size: clamp(0.6rem,0.75vw,0.7rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 4px;
+}
+.site-preview-title {
+  font-size: clamp(0.82rem,1.1vw,1rem);
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.site-preview-url {
+  font-size: clamp(0.62rem,0.72vw,0.68rem);
+  color: var(--muted);
+}
+
+/* ── LOGO LINKS ── */
+a.logo-link {
+  display: inline-flex; align-items: center;
+  transition: opacity 0.18s;
+  text-decoration: none;
+}
+a.logo-link:hover { opacity: 0.78; }
+
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<header id="logo-bar">
+  <a href="https://win4smes.eu/" target="_blank" rel="noopener" class="logo-link"><img class="win4smes-logo" src="win4smes-logo-eu-logo-2025.png" alt="WIN4SMEs — Co-funded by the European Union"></a>
+  <a href="https://covepolska.pl/" target="_blank" rel="noopener" class="logo-link"><img class="cove-logo" src="COVE%20Polska%20bez%20t%C5%82a.png" alt="COVE Polska"></a>
+</header>
+
+<canvas id="bg-canvas"></canvas>
+
+<main id="slides">
+
+<!-- ══ SLIDE 1 — TITLE ══════════════════════════════════════════════════════ -->
+<section class="slide active" id="slide-1">
+  <!-- bg: sweeping COVE arc / swoosh -->
+  <svg class="slide-bg-deco" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <path d="M -120 620 Q 380 -80 1320 240" stroke="#0077cc" stroke-width="220" fill="none" stroke-opacity="0.032"/>
+    <path d="M -80 700 Q 480 80 1320 420"   stroke="#e8a020" stroke-width="80"  fill="none" stroke-opacity="0.038"/>
+    <circle cx="1100" cy="80"  r="180" fill="#0077cc" opacity="0.025"/>
+    <circle cx="80"   cy="620" r="130" fill="#e8a020" opacity="0.03"/>
+  </svg>
+  <div class="section-label as">WIN4SMEs · COVE Poland · Hamburg 2026</div>
+  <h1 class="big-title at">Bold Partnerships<br>and New Horizons</h1>
+  <p class="big-sub a1">Networks, AI and Teacher Onboarding<br>
+  <em>The experience of COVE Poland within the WIN4SMEs project</em></p>
+  <div class="accent-line a2"></div>
+  <ul class="pt-list a3" style="max-width:560px; margin-bottom:clamp(14px,2.2vh,22px);">
+    <li>Vocational education as a shared responsibility</li>
+    <li>From separate institutions to practical cooperation</li>
+    <li>Making VET more attractive, visible and useful</li>
+  </ul>
+  <div class="p-logos a4">
+    <a href="https://zsz5.edupage.org/" target="_blank" rel="noopener" class="logo-link"><img src="Orze%C5%82%20%2B%20szko%C5%82a%20mistrz%C3%B3w.png" alt="Zespół Szkół Zawodowych nr 5"></a>
+    <a href="https://pwr.edu.pl/" target="_blank" rel="noopener" class="logo-link"><img class="pwr-logo" src="logo_pwr_kolor_poziom_ang.png"     alt="Wrocław University of Science and Technology"></a>
+    <a href="https://izba.wroc.pl/" target="_blank" rel="noopener" class="logo-link"><img class="dir-logo" src="logo_DolnoslaskaIzbaRzemieslnicza.png"               alt="Dolnośląska Izba Rzemieślnicza we Wrocławiu"></a>
+  </div>
+  <aside class="speaker-notes" style="display:none;">
+Good morning. My name is Maciej Najwer and I represent COVE Poland and Vocational School Complex No. 5 in Wrocław. In this short presentation, I would like to share our experience of building cooperation around vocational education in Poland. Our main goal is clear: we want to strengthen vocational education and make it more attractive for young people, parents, teachers, employers and local institutions. But the path to this goal was not obvious from the beginning.
+  </aside>
+</section>
+
+<!-- ══ SLIDE 2 — POLISH CONTEXT ═════════════════════════════════════════════ -->
+<section class="slide" id="slide-2">
+  <h2 class="slide-title at">A Difficult but Promising Context</h2>
+  <div class="accent-line as"></div>
+  <div class="two-col a1" style="max-width:920px;">
+    <div>
+      <p class="slide-sub" style="text-align:left; margin-bottom:14px;">Different institutions — one shared goal</p>
+      <ul class="pt-list">
+        <li>Vocational school</li>
+        <li>Chamber of Crafts</li>
+        <li>University</li>
+        <li>Employers and local partners</li>
+        <li>One goal — but different daily realities</li>
+      </ul>
+    </div>
+    <div class="p-logo-cards a2">
+      <div class="p-logo-card">
+        <a href="https://zsz5.edupage.org/" target="_blank" rel="noopener" class="logo-link"><img src="Orze%C5%82%20%2B%20szko%C5%82a%20mistrz%C3%B3w.png" alt="Zespół Szkół Zawodowych nr 5 we Wrocławiu"></a>
+      </div>
+      <div class="p-logo-card">
+        <a href="https://pwr.edu.pl/" target="_blank" rel="noopener" class="logo-link"><img class="pwr-logo" src="logo_pwr_kolor_poziom_ang.png" alt="Wrocław University of Science and Technology"></a>
+      </div>
+      <div class="p-logo-card">
+        <a href="https://izba.wroc.pl/" target="_blank" rel="noopener" class="logo-link"><img class="dir-logo" src="logo_DolnoslaskaIzbaRzemieslnicza.png" alt="Dolnośląska Izba Rzemieślnicza we Wrocławiu"></a>
+      </div>
+    </div>
+  </div>
+  <aside class="speaker-notes" style="display:none;">
+When we started as the Polish COVE team, we had different institutions around one table. We had a vocational school, the Chamber of Crafts, Wrocław University of Science and Technology, and other partners connected with education and the labour market. At the beginning, it was not completely clear how we should cooperate in practice. We shared the same general goal — strengthening vocational education — but we came from different realities. A school thinks about students, lessons and teachers. A craft chamber thinks about employers, qualifications and apprenticeships. A university thinks about research, innovation and knowledge transfer. So our first challenge was not only to implement an activity plan. Our first challenge was to find a common language.
+  </aside>
+</section>
+
+<!-- ══ SLIDE 3 — STRENGTH ════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-3">
+  <!-- bg: Venn circles symbolising intersecting competencies -->
+  <svg class="slide-bg-deco" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="420" cy="310" r="260" fill="#0077cc" opacity="0.038"/>
+    <circle cx="680" cy="310" r="260" fill="#e8a020" opacity="0.038"/>
+    <circle cx="550" cy="500" r="260" fill="#00a3e0" opacity="0.034"/>
+  </svg>
+  <h2 class="slide-title at">Our Differences Became Our Strength</h2>
+  <div class="accent-line as"></div>
+  <div class="card-grid cg3 a1" style="margin-bottom:clamp(12px,1.8vh,18px); max-width:780px;">
+    <div class="inst-card">
+      <div class="inst-icon">🏫</div>
+      <div class="inst-name">Vocational School</div>
+      <div class="inst-desc">Students, teachers and everyday classroom practice</div>
+    </div>
+    <div class="inst-card">
+      <div class="inst-icon">🔨</div>
+      <div class="inst-name">Chamber of Crafts</div>
+      <div class="inst-desc">Employers, qualifications, apprenticeships</div>
+    </div>
+    <div class="inst-card">
+      <div class="inst-icon">🎓</div>
+      <div class="inst-name">University</div>
+      <div class="inst-desc">Research, innovation and new methods</div>
+    </div>
+  </div>
+  <ul class="pt-list a2" style="margin-bottom:clamp(12px,1.8vh,16px);">
+    <li>We do not need to do the same things</li>
+    <li>Each partner brings something different</li>
+    <li>Knowledge can move between institutions</li>
+    <li>Cooperation starts with small shared spaces</li>
+  </ul>
+  <div class="p-logos a3">
+    <a href="https://zsz5.edupage.org/" target="_blank" rel="noopener" class="logo-link"><img src="Orze%C5%82%20%2B%20szko%C5%82a%20mistrz%C3%B3w.png" alt="ZSZ5"></a>
+    <a href="https://izba.wroc.pl/" target="_blank" rel="noopener" class="logo-link"><img class="dir-logo" src="logo_DolnoslaskaIzbaRzemieslnicza.png"               alt="Dolnośląska Izba Rzemieślnicza"></a>
+    <a href="https://pwr.edu.pl/" target="_blank" rel="noopener" class="logo-link"><img class="pwr-logo" src="logo_pwr_kolor_poziom_ang.png"     alt="Wrocław University of Science and Technology"></a>
+  </div>
+  <aside class="speaker-notes" style="display:none;">
+Over time, we discovered something important. The fact that we are different is not a weakness. It is our strength. We do not need to duplicate each other's work. Instead, we can share what each of us already has. The school brings direct contact with students, teachers and everyday practice. The craft sector brings the perspective of employers and real work. The university brings innovation, research and new methods. The project gives us a structure and a reason to connect these perspectives. This is where cooperation becomes real — not as a formal declaration, but as a practical exchange of knowledge.
+  </aside>
+</section>
+
+<!-- ══ SLIDE 4 — VET ATTRACTIVE ══════════════════════════════════════════════ -->
+<section class="slide" id="slide-4">
+  <!-- bg: radial star / compass — direction and ambition -->
+  <svg class="slide-bg-deco" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <line x1="600" y1="350" x2="1150" y2="30"   stroke="#0077cc" stroke-width="1.2" stroke-opacity="0.09"/>
+    <line x1="600" y1="350" x2="1200" y2="350"  stroke="#0077cc" stroke-width="1.2" stroke-opacity="0.09"/>
+    <line x1="600" y1="350" x2="1150" y2="670"  stroke="#0077cc" stroke-width="1.2" stroke-opacity="0.09"/>
+    <line x1="600" y1="350" x2="600"  y2="700"  stroke="#0077cc" stroke-width="1.2" stroke-opacity="0.07"/>
+    <line x1="600" y1="350" x2="50"   y2="670"  stroke="#0077cc" stroke-width="1.2" stroke-opacity="0.06"/>
+    <line x1="600" y1="350" x2="0"    y2="350"  stroke="#0077cc" stroke-width="1.2" stroke-opacity="0.06"/>
+    <line x1="600" y1="350" x2="50"   y2="30"   stroke="#0077cc" stroke-width="1.2" stroke-opacity="0.06"/>
+    <line x1="600" y1="350" x2="600"  y2="0"    stroke="#0077cc" stroke-width="1.2" stroke-opacity="0.07"/>
+    <circle cx="600" cy="350" r="130" fill="none" stroke="#e8a020" stroke-width="1.5" stroke-opacity="0.08"/>
+    <circle cx="600" cy="350" r="240" fill="none" stroke="#0077cc" stroke-width="1"   stroke-opacity="0.05"/>
+  </svg>
+  <h2 class="slide-title at">Making VET More Attractive</h2>
+  <div class="accent-line as"></div>
+  <ul class="pt-list a1" style="margin-bottom:clamp(14px,2vh,20px);">
+    <li>Better perception of vocational education</li>
+    <li>Stronger communication with students and parents</li>
+    <li>Practical skills and real career paths</li>
+    <li>Closer cooperation with employers</li>
+    <li><span class="hl-gold">VET as a modern and ambitious choice</span></li>
+  </ul>
+  <div class="key-box a2">
+    VET should not be seen as a second choice.<br>
+    <strong>It is a modern, practical and ambitious route.</strong>
+  </div>
+  <aside class="speaker-notes" style="display:none;">
+The central idea behind our work is to make vocational education more attractive. This does not mean only better promotion or nicer visual materials. It means showing the real value of vocational education: practical skills, employability, entrepreneurship, independence and future development. In Poland, vocational education still needs a stronger and more positive narrative. Students and parents should not see VET as a second-choice path. They should see it as a modern, practical and ambitious route.
+  </aside>
+</section>
+
+<!-- ══ SLIDE 5 — WIDER MISSION ═══════════════════════════════════════════════ -->
+<section class="slide" id="slide-5">
+  <h2 class="slide-title at">From Project Tasks to a Wider Mission</h2>
+  <div class="accent-line as"></div>
+  <div class="two-col a1" style="max-width:860px;">
+    <div class="split-col">
+      <h3>We implement the activity plan</h3>
+      <ul>
+        <li>Meetings and workshops</li>
+        <li>Study visits</li>
+        <li>Reporting and documentation</li>
+        <li>Partner coordination</li>
+      </ul>
+    </div>
+    <div class="split-col accent-col a2">
+      <h3>But we want to go further</h3>
+      <ul>
+        <li>Results must be visible</li>
+        <li>Materials must be easy to access</li>
+        <li>Impact requires communication</li>
+        <li>Usability is part of sustainability</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="speaker-notes" style="display:none;">
+Of course, we are implementing the activity plan. This is necessary and important. But for us, the project is not only about completing tasks. We want to go further. We want our work to be visible, understandable and useful for people outside the immediate project team. If we create valuable materials, but they remain hidden in long documents or difficult-to-access folders, their real impact is limited. That is why we treat communication, accessibility and visual clarity as part of the project's sustainability.
+  </aside>
+</section>
+
+<!-- ══ SLIDE 6 — DIGITAL VISIBILITY ═════════════════════════════════════════ -->
+<section class="slide" id="slide-6">
+  <h2 class="slide-title at">Making Results Easy to Find and Use</h2>
+  <div class="accent-line as"></div>
+  <!-- Animated SVG flow path -->
+  <svg class="flow-svg a1" viewBox="0 0 680 90" xmlns="http://www.w3.org/2000/svg">
+    <!-- Curved connecting path -->
+    <path id="flow-path" d="M 60,45 C 120,20 160,70 220,45 S 340,20 400,45 S 520,70 620,45"
+          fill="none" stroke="url(#flow-grad)" stroke-width="2.5" stroke-dasharray="700" stroke-dashoffset="700"/>
+    <defs>
+      <linearGradient id="flow-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="#0077cc"/>
+        <stop offset="100%" stop-color="#e8a020"/>
+      </linearGradient>
+    </defs>
+    <!-- Node circles -->
+    <circle cx="60"  cy="45" r="28" fill="white" stroke="#0077cc" stroke-width="2" opacity="0"/>
+    <circle cx="230" cy="45" r="28" fill="white" stroke="#0077cc" stroke-width="1.5" opacity="0"/>
+    <circle cx="400" cy="45" r="28" fill="white" stroke="#0077cc" stroke-width="1.5" opacity="0"/>
+    <circle cx="570" cy="45" r="28" fill="white" stroke="#e8a020" stroke-width="2" opacity="0"/>
+    <!-- Emojis -->
+    <text x="60"  y="52" text-anchor="middle" font-size="20" opacity="0">📄</text>
+    <text x="230" y="52" text-anchor="middle" font-size="20" opacity="0">🌐</text>
+    <text x="400" y="52" text-anchor="middle" font-size="20" opacity="0">🗂️</text>
+    <text x="570" y="52" text-anchor="middle" font-size="20" opacity="0">👥</text>
+    <!-- Labels -->
+    <text x="60"  y="84" text-anchor="middle" fill="#3a5085" font-size="9.5" font-family="system-ui,sans-serif" opacity="0" data-i18n="s6_fl1">Long PDFs</text>
+    <text x="230" y="84" text-anchor="middle" fill="#3a5085" font-size="9.5" font-family="system-ui,sans-serif" opacity="0" data-i18n="s6_fl2">Websites</text>
+    <text x="400" y="84" text-anchor="middle" fill="#3a5085" font-size="9.5" font-family="system-ui,sans-serif" opacity="0" data-i18n="s6_fl3">Thematic pages</text>
+    <text x="570" y="84" text-anchor="middle" fill="#3a5085" font-size="9.5" font-family="system-ui,sans-serif" opacity="0" data-i18n="s6_fl4">Useful for others</text>
+  </svg>
+  <ul class="pt-list a2">
+    <li>Clear online presence from the beginning</li>
+    <li>Practical formats, not only long documents</li>
+    <li>Materials for teachers, schools, employers and partners</li>
+    <li><span class="hl-gold">Dissemination means making results useful — not just reporting them</span></li>
+  </ul>
+  <aside class="speaker-notes" style="display:none;">
+From the beginning, we wanted COVE Poland to be visible online. This is not only about promotion. It is about making our results easier to find and easier to use. Long PDF documents are important. They are detailed and precise. But they are not always the easiest format for everyday use. So we are building websites, thematic subpages and practical materials that can be opened, read, translated and used by different groups. For us, dissemination is not only reporting what we have done. Dissemination means making project results useful for others.
+  </aside>
+</section>
+
+<!-- ══ SLIDE 7 — NETWORKS ════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-7">
+  <h2 class="slide-title at">Creating Spaces Where Cooperation Can Happen</h2>
+  <div class="accent-line as"></div>
+
+  <!-- Animated hexagonal network SVG -->
+  <div class="net-wrap a2" style="margin-bottom:clamp(10px,1.6vh,16px);">
+    <svg viewBox="0 0 620 310" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- Glow behind center -->
+      <circle cx="310" cy="155" r="52" fill="#0077cc" opacity="0.07"/>
+
+      <!-- Spokes: center → outer nodes (dasharray ≈ 112) -->
+      <line class="net-spoke" x1="310" y1="155" x2="310" y2="43"
+            stroke="#c8d8ee" stroke-width="2" stroke-dasharray="114" stroke-dashoffset="114" style="animation-delay:.22s"/>
+      <line class="net-spoke" x1="310" y1="155" x2="407" y2="99"
+            stroke="#c8d8ee" stroke-width="2" stroke-dasharray="114" stroke-dashoffset="114" style="animation-delay:.30s"/>
+      <line class="net-spoke" x1="310" y1="155" x2="407" y2="211"
+            stroke="#c8d8ee" stroke-width="2" stroke-dasharray="114" stroke-dashoffset="114" style="animation-delay:.38s"/>
+      <line class="net-spoke" x1="310" y1="155" x2="310" y2="267"
+            stroke="#c8d8ee" stroke-width="2" stroke-dasharray="114" stroke-dashoffset="114" style="animation-delay:.30s"/>
+      <line class="net-spoke" x1="310" y1="155" x2="213" y2="211"
+            stroke="#c8d8ee" stroke-width="2" stroke-dasharray="114" stroke-dashoffset="114" style="animation-delay:.38s"/>
+      <line class="net-spoke" x1="310" y1="155" x2="213" y2="99"
+            stroke="#c8d8ee" stroke-width="2" stroke-dasharray="114" stroke-dashoffset="114" style="animation-delay:.46s"/>
+
+      <!-- Perimeter (hexagon edges, dasharray ≈ 112) -->
+      <line class="net-cross" x1="310" y1="43"  x2="407" y2="99"
+            stroke="#dde8f5" stroke-width="1.5" stroke-dasharray="114" stroke-dashoffset="114" style="animation-delay:.60s"/>
+      <line class="net-cross" x1="407" y1="99"  x2="407" y2="211"
+            stroke="#dde8f5" stroke-width="1.5" stroke-dasharray="114" stroke-dashoffset="114" style="animation-delay:.68s"/>
+      <line class="net-cross" x1="407" y1="211" x2="310" y2="267"
+            stroke="#dde8f5" stroke-width="1.5" stroke-dasharray="114" stroke-dashoffset="114" style="animation-delay:.76s"/>
+      <line class="net-cross" x1="310" y1="267" x2="213" y2="211"
+            stroke="#dde8f5" stroke-width="1.5" stroke-dasharray="114" stroke-dashoffset="114" style="animation-delay:.68s"/>
+      <line class="net-cross" x1="213" y1="211" x2="213" y2="99"
+            stroke="#dde8f5" stroke-width="1.5" stroke-dasharray="114" stroke-dashoffset="114" style="animation-delay:.76s"/>
+      <line class="net-cross" x1="213" y1="99"  x2="310" y2="43"
+            stroke="#dde8f5" stroke-width="1.5" stroke-dasharray="114" stroke-dashoffset="114" style="animation-delay:.84s"/>
+
+      <!-- Center node -->
+      <circle cx="310" cy="155" r="36" fill="#0077cc"/>
+      <text x="310" y="151" text-anchor="middle" fill="white" font-size="9.5" font-weight="700" font-family="system-ui,sans-serif">COVE</text>
+      <text x="310" y="163" text-anchor="middle" fill="white" font-size="9.5" font-weight="700" font-family="system-ui,sans-serif">Poland</text>
+
+      <!-- Outer nodes (each is a <g class="net-node">) -->
+      <g class="net-node" style="animation-delay:.22s">
+        <circle cx="310" cy="43" r="31" fill="white" stroke="#1a2b5e" stroke-width="2"/>
+        <text x="310" y="39" text-anchor="middle" fill="#1a2b5e" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Vocational</text>
+        <text x="310" y="50" text-anchor="middle" fill="#1a2b5e" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Schools</text>
+      </g>
+      <g class="net-node" style="animation-delay:.30s">
+        <circle cx="407" cy="99" r="31" fill="white" stroke="#1a2b5e" stroke-width="2"/>
+        <text x="407" y="95" text-anchor="middle" fill="#1a2b5e" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Employers</text>
+        <text x="407" y="106" text-anchor="middle" fill="#e8a020" font-size="8" font-weight="600" font-family="system-ui,sans-serif">&amp; Business</text>
+      </g>
+      <g class="net-node" style="animation-delay:.38s">
+        <circle cx="407" cy="211" r="31" fill="white" stroke="#1a2b5e" stroke-width="2"/>
+        <text x="407" y="207" text-anchor="middle" fill="#1a2b5e" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Chamber</text>
+        <text x="407" y="218" text-anchor="middle" fill="#1a2b5e" font-size="8" font-weight="600" font-family="system-ui,sans-serif">of Crafts</text>
+      </g>
+      <g class="net-node" style="animation-delay:.46s">
+        <circle cx="310" cy="267" r="31" fill="white" stroke="#e8a020" stroke-width="2"/>
+        <text x="310" y="263" text-anchor="middle" fill="#1a2b5e" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Teachers &amp;</text>
+        <text x="310" y="274" text-anchor="middle" fill="#1a2b5e" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Students</text>
+      </g>
+      <g class="net-node" style="animation-delay:.38s">
+        <circle cx="213" cy="211" r="31" fill="white" stroke="#1a2b5e" stroke-width="2"/>
+        <text x="213" y="207" text-anchor="middle" fill="#1a2b5e" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Local</text>
+        <text x="213" y="218" text-anchor="middle" fill="#1a2b5e" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Institutions</text>
+      </g>
+      <g class="net-node" style="animation-delay:.30s">
+        <circle cx="213" cy="99" r="31" fill="white" stroke="#1a2b5e" stroke-width="2"/>
+        <text x="213" y="95" text-anchor="middle" fill="#1a2b5e" font-size="8" font-weight="600" font-family="system-ui,sans-serif">University</text>
+        <text x="213" y="106" text-anchor="middle" fill="#1a2b5e" font-size="8" font-weight="600" font-family="system-ui,sans-serif">Partners</text>
+      </g>
+
+      <!-- Animated particles flowing outward along each spoke -->
+      <circle r="3.5" fill="#0077cc" opacity="0">
+        <animateMotion dur="1.7s" repeatCount="indefinite" begin="1.3s" path="M310,155 L310,43"/>
+        <animate attributeName="opacity" values="0;0.8;0" dur="1.7s" repeatCount="indefinite" begin="1.3s"/>
+      </circle>
+      <circle r="3.5" fill="#0077cc" opacity="0">
+        <animateMotion dur="1.7s" repeatCount="indefinite" begin="2.2s" path="M310,155 L310,43"/>
+        <animate attributeName="opacity" values="0;0.8;0" dur="1.7s" repeatCount="indefinite" begin="2.2s"/>
+      </circle>
+      <circle r="3.5" fill="#e8a020" opacity="0">
+        <animateMotion dur="1.8s" repeatCount="indefinite" begin="1.5s" path="M310,155 L407,99"/>
+        <animate attributeName="opacity" values="0;0.8;0" dur="1.8s" repeatCount="indefinite" begin="1.5s"/>
+      </circle>
+      <circle r="3.5" fill="#0077cc" opacity="0">
+        <animateMotion dur="1.9s" repeatCount="indefinite" begin="1.9s" path="M310,155 L407,211"/>
+        <animate attributeName="opacity" values="0;0.8;0" dur="1.9s" repeatCount="indefinite" begin="1.9s"/>
+      </circle>
+      <circle r="3.5" fill="#e8a020" opacity="0">
+        <animateMotion dur="1.7s" repeatCount="indefinite" begin="1.6s" path="M310,155 L310,267"/>
+        <animate attributeName="opacity" values="0;0.8;0" dur="1.7s" repeatCount="indefinite" begin="1.6s"/>
+      </circle>
+      <circle r="3.5" fill="#0077cc" opacity="0">
+        <animateMotion dur="2.0s" repeatCount="indefinite" begin="2.0s" path="M310,155 L213,211"/>
+        <animate attributeName="opacity" values="0;0.8;0" dur="2.0s" repeatCount="indefinite" begin="2.0s"/>
+      </circle>
+      <circle r="3.5" fill="#e8a020" opacity="0">
+        <animateMotion dur="1.8s" repeatCount="indefinite" begin="2.5s" path="M310,155 L213,99"/>
+        <animate attributeName="opacity" values="0;0.8;0" dur="1.8s" repeatCount="indefinite" begin="2.5s"/>
+      </circle>
+    </svg>
+  </div>
+
+  <!-- Four key points below the network -->
+  <div class="mini-pt-grid a3">
+    <div class="mini-pt">Shared workshops &amp; meetings</div>
+    <div class="mini-pt">Study visits &amp; joint training</div>
+    <div class="mini-pt">Common materials &amp; tools</div>
+    <div class="mini-pt">Relationships first — systems second</div>
+  </div>
+
+  <aside class="speaker-notes" style="display:none;">
+One of our main conclusions is that cooperation needs real spaces. It is not enough to say that schools and employers should cooperate. We need practical formats: meetings, workshops, study visits, joint training, shared materials and common projects. This is why we focus on networking. We want to connect vocational schools with employers, universities, chambers of crafts and local institutions. The goal is to build relationships first, and then build systems on top of these relationships.
+  </aside>
+</section>
+
+<!-- ══ SLIDE 8 — AI ══════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-8">
+  <h2 class="slide-title at">AI as a Support Tool, Not the Goal</h2>
+  <div class="accent-line as"></div>
+  <div class="card-grid cg4 a1" style="margin-bottom:clamp(14px,2vh,18px);">
+    <div class="card">
+      <div class="card-icon">📝</div>
+      <div class="card-title">Lesson planning</div>
+      <div class="card-body">Drafting learning outcomes and lesson structures</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">💬</div>
+      <div class="card-title">Communication</div>
+      <div class="card-body">Supporting clear and effective messaging</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔍</div>
+      <div class="card-title">Document analysis</div>
+      <div class="card-body">Reviewing long texts and extracting key points</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🗓️</div>
+      <div class="card-title">Work organisation</div>
+      <div class="card-body">Helping teachers manage tasks and routines</div>
+    </div>
+  </div>
+  <a class="site-preview a3" href="https://ai.covepolska.pl" target="_blank" rel="noopener">
+    <img src="ai_screen.jpg" alt="ai.covepolska.pl screenshot">
+    <div class="site-preview-info">
+      <div class="site-preview-label" data-i18n="s8_prev_label">Explore the course</div>
+      <div class="site-preview-title" data-i18n="s8_prev_title">AI in education, organisations and projects — free online course</div>
+      <div class="site-preview-url">ai.covepolska.pl</div>
+    </div>
+  </a>
+  <div class="key-box a2">
+    <strong>AI should support teachers — not replace them.</strong><br>
+    <em>Responsible use, in cooperation with higher education.</em>
+  </div>
+  <aside class="speaker-notes" style="display:none;">
+One of our practical pilot areas is artificial intelligence. But we do not treat AI as the goal itself. AI is only useful if it supports real educational work. We are interested in practical applications: lesson planning, preparing materials, supporting communication, analysing documents and helping teachers organise their work. Cooperation with higher education is very important here, because it helps us connect innovation with responsible implementation. The key message is simple: AI should support teachers, not replace them.
+  </aside>
+</section>
+
+<!-- ══ SLIDE 9 — ONBOARDING ══════════════════════════════════════════════════ -->
+<section class="slide" id="slide-9">
+  <h2 class="slide-title at">Teacher Onboarding: A Missing Practical HR Tool</h2>
+  <div class="accent-line as"></div>
+  <div class="tl a1">
+    <div class="tl-item">
+      <div class="tl-dot">1</div>
+      <div class="tl-body">
+        <div class="tl-label">Formal roles already exist</div>
+        <div class="tl-desc">Novice teacher + designated mentor — defined by regulation</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">2</div>
+      <div class="tl-body">
+        <div class="tl-label">Practical tools are often missing</div>
+        <div class="tl-desc">What happens in week one? What should be explained and when?</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">3</div>
+      <div class="tl-body">
+        <div class="tl-label">First weeks are critical</div>
+        <div class="tl-desc">For confidence, retention and integration into school culture</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">4</div>
+      <div class="tl-body">
+        <div class="tl-label">A structured process supports everyone</div>
+        <div class="tl-desc">Novice teacher, mentor and school leadership</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">5</div>
+      <div class="tl-body">
+        <div class="tl-label">A model other schools can adapt</div>
+        <div class="tl-desc">Strong schools need supported teachers</div>
+      </div>
+    </div>
+  </div>
+  <a class="site-preview a2" href="https://mentor.covepolska.pl" target="_blank" rel="noopener" style="margin-top:clamp(8px,1.2vh,14px)">
+    <img src="mentor_screen.jpg" alt="mentor.covepolska.pl screenshot">
+    <div class="site-preview-info">
+      <div class="site-preview-label" data-i18n="s9_prev_label">See the resource</div>
+      <div class="site-preview-title" data-i18n="s9_prev_title">Structural teacher onboarding model — practical tools for schools</div>
+      <div class="site-preview-url">mentor.covepolska.pl</div>
+    </div>
+  </a>
+  <aside class="speaker-notes" style="display:none;">
+Another important area is teacher onboarding. In Poland, we already have formal roles: the novice teacher and the mentor. But formal roles do not automatically create a good process. Many schools still need practical tools that answer simple questions: What should happen in the first week? What should the mentor and novice teacher discuss? What documents and routines should be explained? How should school knowledge be transferred between generations of teachers? This is why we are developing a structured onboarding process. It is meant to support the novice teacher, the mentor and the school leadership. For us, onboarding is not only an internal HR topic. It is part of strengthening vocational education, because strong schools need supported teachers.
+  </aside>
+</section>
+
+<!-- ══ SLIDE 10 — TRANSFER OF KNOWLEDGE ═════════════════════════════════════ -->
+<section class="slide" id="slide-10">
+  <!-- bg: diagonal blue→gold gradient (direction of flow) -->
+  <svg class="slide-bg-deco" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="g10" x1="0%" y1="100%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="#0077cc" stop-opacity="0.09"/>
+        <stop offset="100%" stop-color="#e8a020" stop-opacity="0.08"/>
+      </linearGradient>
+    </defs>
+    <rect width="1200" height="700" fill="url(#g10)"/>
+    <line x1="0" y1="700" x2="1200" y2="0" stroke="#0077cc" stroke-width="2" stroke-opacity="0.055"/>
+    <line x1="0" y1="560" x2="1060" y2="0" stroke="#e8a020" stroke-width="1" stroke-opacity="0.04"/>
+  </svg>
+  <h2 class="slide-title at">One Logic: Transfer of Knowledge</h2>
+  <p class="slide-sub as">What connects networks, AI, onboarding and digital visibility?</p>
+  <div class="tr-list a1">
+    <div class="tr-item">
+      <div class="tr-from">University</div>
+      <div class="tr-arr">→</div>
+      <div class="tr-to">School</div>
+    </div>
+    <div class="tr-item">
+      <div class="tr-from">Employers</div>
+      <div class="tr-arr">→</div>
+      <div class="tr-to">Education</div>
+    </div>
+    <div class="tr-item">
+      <div class="tr-from">Experienced teachers</div>
+      <div class="tr-arr">→</div>
+      <div class="tr-to">Novice teachers</div>
+    </div>
+    <div class="tr-item">
+      <div class="tr-from">Project documents</div>
+      <div class="tr-arr">→</div>
+      <div class="tr-to">Practical, accessible tools</div>
+    </div>
+    <div class="tr-item">
+      <div class="tr-from">Isolated actions</div>
+      <div class="tr-arr">→</div>
+      <div class="tr-to">Shared capacity</div>
+    </div>
+  </div>
+  <aside class="speaker-notes" style="display:none;">
+At first, these topics may look different: networks, promotion, AI, onboarding, websites. But for us, they are connected by one logic: transfer of knowledge. We want knowledge to move between institutions. From university to school. From employers to education. From experienced teachers to novice teachers. From project documents to practical tools. From isolated actions to shared capacity. This is the real value of the project for us.
+  </aside>
+</section>
+
+<!-- ══ SLIDE 11 — CONCLUSIONS ════════════════════════════════════════════════ -->
+<section class="slide" id="slide-11">
+  <h2 class="slide-title at">What We Are Learning</h2>
+  <div class="accent-line as"></div>
+  <ul class="pt-list a1" style="margin-bottom:clamp(14px,2vh,20px);">
+    <li>Cooperation often starts without obvious common ground</li>
+    <li>Shared spaces are discovered through practical action</li>
+    <li>VET needs visibility, accessibility and strong partnerships</li>
+    <li>Small pilots can fill real systemic gaps</li>
+    <li>The project can become a platform for further development</li>
+  </ul>
+  <div class="key-box a2">
+    We are not only implementing an activity plan.<br>
+    <strong>
+      <span class="krev" style="--kd:0">We</span>
+      <span class="krev" style="--kd:1">are</span>
+      <span class="krev" style="--kd:2">building</span>
+      <span class="krev" style="--kd:3">shared</span>
+      <span class="krev" style="--kd:4">spaces</span>
+      <span class="krev" style="--kd:5">where</span>
+      <span class="krev" style="--kd:6">vocational</span>
+      <span class="krev" style="--kd:7">education</span>
+      <span class="krev" style="--kd:8">can</span>
+      <span class="krev" style="--kd:9">become</span>
+      <span class="krev" style="--kd:10">more</span>
+      <span class="krev" style="--kd:11">attractive,</span>
+      <span class="krev" style="--kd:12">practical</span>
+      <span class="krev" style="--kd:13">and</span>
+      <span class="krev" style="--kd:14">visible.</span>
+    </strong>
+  </div>
+  <aside class="speaker-notes" style="display:none;">
+To conclude, our experience is that cooperation does not always start with a ready-made common space. Sometimes this space has to be discovered. At the beginning, we had different institutions around one table. Over time, we learned that each partner brings something valuable. The activity plan gives us structure. But the wider mission is to make vocational education stronger, more attractive and more visible. For us, this means building networks, communicating clearly, creating accessible materials, testing AI tools and developing practical solutions such as teacher onboarding. Our goal is not only to complete project tasks. Our goal is to create solutions that can be used, adapted and developed further.
+  </aside>
+</section>
+
+<!-- ══ SLIDE 12 — OPEN FLOOR ═════════════════════════════════════════════════ -->
+<section class="slide" id="slide-12">
+  <!-- bg: SMIL concentric ripples — invitation / resonance -->
+  <svg class="slide-bg-deco" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="600" cy="350" r="60" fill="none" stroke="#0077cc" stroke-width="2.5">
+      <animate attributeName="r"              from="60"  to="400" dur="4s" repeatCount="indefinite" begin="0s"/>
+      <animate attributeName="stroke-opacity" values="0.18;0.06;0" dur="4s" repeatCount="indefinite" begin="0s"/>
+    </circle>
+    <circle cx="600" cy="350" r="60" fill="none" stroke="#0077cc" stroke-width="2.5">
+      <animate attributeName="r"              from="60"  to="400" dur="4s" repeatCount="indefinite" begin="1.33s"/>
+      <animate attributeName="stroke-opacity" values="0.18;0.06;0" dur="4s" repeatCount="indefinite" begin="1.33s"/>
+    </circle>
+    <circle cx="600" cy="350" r="60" fill="none" stroke="#0077cc" stroke-width="2.5">
+      <animate attributeName="r"              from="60"  to="400" dur="4s" repeatCount="indefinite" begin="2.66s"/>
+      <animate attributeName="stroke-opacity" values="0.18;0.06;0" dur="4s" repeatCount="indefinite" begin="2.66s"/>
+    </circle>
+    <circle cx="600" cy="350" r="60" fill="none" stroke="#e8a020" stroke-width="1.5">
+      <animate attributeName="r"              from="60"  to="320" dur="5.5s" repeatCount="indefinite" begin="0.5s"/>
+      <animate attributeName="stroke-opacity" values="0.12;0.04;0" dur="5.5s" repeatCount="indefinite" begin="0.5s"/>
+    </circle>
+  </svg>
+  <div class="mic-circle at">💬</div>
+  <h2 class="slide-title as" style="margin-bottom:8px;">Your Turn</h2>
+  <p class="open-text a1">
+    We would love to hear your questions, experiences and insights.<br>
+    What challenges do you face? What has worked in your context?<br>
+    What does real cooperation between institutions look like for you?
+  </p>
+  <p class="backup-hint a2">No questions from the floor? Press <kbd>→</kbd> for prepared discussion topics.</p>
+  <aside class="speaker-notes" style="display:none;">
+I would like to finish with an open invitation. I am especially interested in your experience with cooperation between institutions. How do you move from formal partnership to real practical cooperation? And how can we make project results more accessible and useful for people who were not directly involved in creating them? If there are no questions from the audience, press → to show prepared discussion topics.
+  </aside>
+</section>
+
+<!-- ══ SLIDE 13 — BACKUP: DISCUSSION TOPICS ══════════════════════════════════ -->
+<section class="slide" id="slide-13">
+  <div class="section-label as">Prepared Discussion Topics</div>
+  <h2 class="slide-title at">Questions for Discussion</h2>
+  <div class="accent-line a1"></div>
+  <div class="q-list a2">
+    <div class="q-item">
+      <div class="q-num">1</div>
+      <div class="q-text">How do you create real cooperation between different institutions?</div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">2</div>
+      <div class="q-text">How can project results become more accessible and useful beyond the team?</div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">3</div>
+      <div class="q-text">What makes VET attractive for young people and parents today?</div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">4</div>
+      <div class="q-text">Which small practical tools can fill important gaps in schools?</div>
+    </div>
+  </div>
+  <div class="p-logos a3" style="margin-top:clamp(12px,1.8vh,18px);">
+    <a href="https://zsz5.edupage.org/" target="_blank" rel="noopener" class="logo-link"><img src="Orze%C5%82%20%2B%20szko%C5%82a%20mistrz%C3%B3w.png" alt="ZSZ5 Wrocław"></a>
+    <a href="https://pwr.edu.pl/" target="_blank" rel="noopener" class="logo-link"><img class="pwr-logo" src="logo_pwr_kolor_poziom_ang.png"     alt="Wrocław University of Science and Technology"></a>
+    <a href="https://izba.wroc.pl/" target="_blank" rel="noopener" class="logo-link"><img class="dir-logo" src="logo_DolnoslaskaIzbaRzemieslnicza.png" alt="Dolnośląska Izba Rzemieślnicza we Wrocławiu"></a>
+  </div>
+  <p class="eu-disclaimer a4"><a href="https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/home" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline dotted;">
+    Funded by the European Union. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or the European Education and Culture Executive Agency (EACEA). Neither the European Union nor EACEA can be held responsible for them.
+  </a></p>
+  <aside class="speaker-notes" style="display:none;">
+Backup slide with prepared discussion topics in case there are no spontaneous questions from the audience.
+  </aside>
+</section>
+
+</main>
+
+<footer id="footer">
+  <span id="slide-counter">1 / 13</span>
+  <span id="nav-hint">→ click or Space to advance · ← back</span>
+  <span id="lang-switch">
+    <select id="lang-select" aria-label="Language">
+      <option value="en">EN — English</option>
+      <option value="pl">PL — Polski</option>
+      <option value="de">DE — Deutsch</option>
+      <option value="fi">FI — Suomi</option>
+      <option value="hu">HU — Magyar</option>
+      <option value="uk">UK — Українська</option>
+      <option value="nl">NL — Nederlands</option>
+      <option value="da">DA — Dansk</option>
+      <option value="lt">LT — Lietuvių</option>
+    </select>
+  </span>
+</footer>
+
+<script>
+(function () {
+  var TOTAL   = 13;
+  var current = 1;
+  var hintGone = false;
+  var useVT = typeof document.startViewTransition === 'function';
+
+  var slides  = document.querySelectorAll('.slide');
+  var bar     = document.getElementById('progress-bar');
+  var counter = document.getElementById('slide-counter');
+  var hint    = document.getElementById('nav-hint');
+
+  /* ── animation class tokens per transition type ── */
+  var KEY_SLIDES = { 4:1, 8:1, 11:1, 12:1 }; // scale-up treatment
+
+  function updateUI() {
+    bar.style.width = (current / TOTAL * 100) + '%';
+    counter.textContent = current + ' / ' + TOTAL;
+    if (!hintGone) { hintGone = true; hint.style.opacity = '0'; }
+  }
+
+  function applySlide(n, dir, vtDir) {
+    slides[current - 1].classList.remove('active');
+    current = n;
+    var s = slides[current - 1];
+    s.classList.remove('active','ef','eb','ek');
+    void s.offsetWidth;
+    if (!useVT) {
+      if (vtDir === 'key') s.classList.add('ek');
+      else if (dir > 0)    s.classList.add('ef');
+      else                 s.classList.add('eb');
+    }
+    s.classList.add('active');
+    setCanvasCfg(n);
+    updateUI();
+  }
+
+  function go(n) {
+    n = Math.max(1, Math.min(TOTAL, n));
+    if (n === current) return;
+    var dir   = n > current ? 1 : -1;
+    var vtDir = KEY_SLIDES[n] ? 'key' : (dir > 0 ? 'fwd' : 'bwd');
+
+    if (useVT) {
+      document.documentElement.dataset.dir = vtDir;
+      document.startViewTransition(function () { applySlide(n, dir, vtDir); });
+    } else {
+      applySlide(n, dir, vtDir);
+    }
+  }
+
+  document.addEventListener('keydown', function (e) {
+    switch (e.key) {
+      case 'ArrowRight': case ' ': e.preventDefault(); go(current + 1); break;
+      case 'ArrowLeft':            e.preventDefault(); go(current - 1); break;
+      case 'Home':                 e.preventDefault(); go(1);           break;
+      case 'End':                  e.preventDefault(); go(TOTAL);       break;
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('#logo-bar') || e.target.closest('#footer')) return;
+    go(current + 1);
+  });
+
+  /* ── Network SVG stroke animation (applied to .net-spoke and .net-cross) ── */
+  function activateNetworkLines(slide) {
+    var lines = slide.querySelectorAll('.net-spoke, .net-cross');
+    lines.forEach(function (el) {
+      var delay = parseFloat(el.style.animationDelay) || 0;
+      el.style.animation = 'none';
+      void el.offsetWidth;
+      el.style.animation = 'drawStroke 0.65s ease ' + delay + 's both';
+    });
+    var nodes = slide.querySelectorAll('.net-node');
+    nodes.forEach(function (el) {
+      var delay = parseFloat(el.style.animationDelay) || 0;
+      el.style.animation = 'none';
+      void el.offsetWidth;
+      el.style.animation = 'netPop 0.4s ease ' + delay + 's both';
+    });
+  }
+
+  /* ── Slide 6 — animated SVG flow path ── */
+  function activateFlowSVG(slide) {
+    var svg = slide.querySelector('.flow-svg');
+    if (!svg) return;
+    var path = svg.querySelector('#flow-path');
+    var circles = svg.querySelectorAll('circle');
+    var texts   = svg.querySelectorAll('text');
+    /* reset */
+    path.style.animation = 'none'; void path.offsetWidth;
+    [].concat([].slice.call(circles), [].slice.call(texts)).forEach(function(el) {
+      el.style.animation = 'none'; el.style.opacity = '0'; void el.offsetWidth;
+    });
+    /* draw path */
+    path.style.animation = 'flowDraw 0.9s cubic-bezier(0.4,0,0.2,1) 0.2s both';
+    /* pop nodes at 4 positions */
+    [0,1,2,3].forEach(function(i) {
+      var delay = (0.45 + i * 0.18) + 's';
+      circles[i].style.animation = 'flowPop 0.3s ease ' + delay + ' both';
+      texts[i].style.animation   = 'flowPop 0.3s ease ' + delay + ' both';
+      texts[i+4].style.animation = 'flowPop 0.3s ease ' + (0.58 + i * 0.18) + 's both';
+    });
+  }
+  var slide6 = document.getElementById('slide-6');
+  new MutationObserver(function(muts) {
+    muts.forEach(function(m) {
+      if (m.target === slide6 && slide6.classList.contains('active')) activateFlowSVG(slide6);
+    });
+  }).observe(slide6, { attributes: true, attributeFilter: ['class'] });
+
+  /* ── Slide 9 — timeline dot glow-in on activation ── */
+  function activateTimeline(slide) {
+    var dots = slide.querySelectorAll('.tl-dot');
+    dots.forEach(function(dot, i) {
+      dot.style.animation = 'none'; void dot.offsetWidth;
+      dot.style.animation = 'netPop 0.38s cubic-bezier(0.2,0,0,1) ' + (0.15 + i * 0.12) + 's both';
+    });
+    var items = slide.querySelectorAll('.tl-body');
+    items.forEach(function(body, i) {
+      body.style.animation = 'none'; void body.offsetWidth;
+      body.style.animation = 'fiu 0.36s ease ' + (0.22 + i * 0.12) + 's both';
+    });
+  }
+  var slide9 = document.getElementById('slide-9');
+  new MutationObserver(function(muts) {
+    muts.forEach(function(m) {
+      if (m.target === slide9 && slide9.classList.contains('active')) activateTimeline(slide9);
+    });
+  }).observe(slide9, { attributes: true, attributeFilter: ['class'] });
+
+  /* ── Slides 3 & 8 — 3D card flip ── */
+  function activateCards(slide, selector) {
+    slide.querySelectorAll(selector).forEach(function(card, i) {
+      card.style.animation = 'none';
+      void card.offsetWidth;
+      card.style.animation = 'cardFlip 0.55s cubic-bezier(0.2,0,0,1) ' + (0.08 + i * 0.13) + 's both';
+    });
+  }
+  var slide3 = document.getElementById('slide-3');
+  new MutationObserver(function(muts) {
+    muts.forEach(function(m) {
+      if (m.target === slide3 && slide3.classList.contains('active')) activateCards(slide3, '.inst-card');
+    });
+  }).observe(slide3, { attributes: true, attributeFilter: ['class'] });
+
+  var slide8 = document.getElementById('slide-8');
+  new MutationObserver(function(muts) {
+    muts.forEach(function(m) {
+      if (m.target === slide8 && slide8.classList.contains('active')) activateCards(slide8, '.card');
+    });
+  }).observe(slide8, { attributes: true, attributeFilter: ['class'] });
+
+  /* Observe slide 7 becoming active */
+  var slide7 = document.getElementById('slide-7');
+  var mo = new MutationObserver(function (muts) {
+    muts.forEach(function (m) {
+      if (m.target === slide7 && slide7.classList.contains('active')) {
+        activateNetworkLines(slide7);
+      }
+    });
+  });
+  mo.observe(slide7, { attributes: true, attributeFilter: ['class'] });
+
+  /* ── Canvas dot-network background ── */
+  var canvas = document.getElementById('bg-canvas');
+  var ctx    = canvas.getContext('2d');
+  var W, H, dots, mouseX, mouseY;
+
+  /* per-slide canvas config: { n: dot count, spd: speed multiplier, max: link distance, dot: dot rgba, line: line rgb } */
+  var CCFG = {
+    default: { n:34, spd:1.0, max:148, dot:'0,119,204,0.13',   line:'26,43,94'  },
+    7:       { n:55, spd:1.3, max:130, dot:'0,119,204,0.15',   line:'0,119,204' },
+    8:       { n:28, spd:0.9, max:140, dot:'232,160,32,0.14',  line:'26,43,94'  },
+    12:      { n:10, spd:0.4, max:200, dot:'0,119,204,0.10',   line:'0,119,204' },
+  };
+  var cCfg = CCFG.default;
+
+  function setCanvasCfg(slideNum) {
+    var next = CCFG[slideNum] || CCFG.default;
+    if (next === cCfg) return;
+    cCfg = next;
+    dots = makeDots(cCfg.n, cCfg.spd);
+  }
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    if (!mouseX) { mouseX = W / 2; mouseY = H / 2; }
+  }
+
+  document.addEventListener('mousemove', function(e) { mouseX = e.clientX; mouseY = e.clientY; });
+
+  function makeDots(n, spd) {
+    spd = spd || 1;
+    var a = [];
+    for (var i = 0; i < n; i++) {
+      a.push({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.22 * spd,
+        vy: (Math.random() - 0.5) * 0.22 * spd
+      });
+    }
+    return a;
+  }
+
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.save();
+    ctx.translate((mouseX / W - 0.5) * 10, (mouseY / H - 0.5) * 10);
+    var MAX = cCfg.max;
+    for (var i = 0; i < dots.length; i++) {
+      var d = dots[i];
+      d.x += d.vx; d.y += d.vy;
+      if (d.x < 0 || d.x > W) d.vx *= -1;
+      if (d.y < 0 || d.y > H) d.vy *= -1;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, 2, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + cCfg.dot + ')';
+      ctx.fill();
+      for (var j = i + 1; j < dots.length; j++) {
+        var dx = dots[j].x - d.x, dy = dots[j].y - d.y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < MAX) {
+          ctx.beginPath();
+          ctx.moveTo(d.x, d.y);
+          ctx.lineTo(dots[j].x, dots[j].y);
+          ctx.strokeStyle = 'rgba(' + cCfg.line + ',' + (0.052 * (1 - dist / MAX)) + ')';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
+    }
+    ctx.restore();
+    requestAnimationFrame(frame);
+  }
+
+  window.addEventListener('resize', function () { resize(); dots = makeDots(cCfg.n, cCfg.spd); });
+  resize(); dots = makeDots(34, 1); frame();
+
+  /* ── i18n ── */
+  var I18N = {"en":{"lang_label":"Language","nav_hint":"→ click or Space to advance · ← back","s1_label":"WIN4SMEs · COVE Poland · Hamburg 2026","s1_title":"Bold Partnerships<br>and New Horizons","s1_sub":"Networks, AI and Teacher Onboarding<br><em>The experience of COVE Poland within the WIN4SMEs project</em>","s1_li1":"Vocational education as a shared responsibility","s1_li2":"From separate institutions to practical cooperation","s1_li3":"Making VET more attractive, visible and useful","s2_title":"A Difficult but Promising Context","s2_sub":"Different institutions — one shared goal","s2_li1":"Vocational school","s2_li2":"Chamber of Crafts","s2_li3":"University","s2_li4":"Employers and local partners","s2_li5":"One goal — but different daily realities","s3_title":"Our Differences Became Our Strength","s3_c1n":"Vocational School","s3_c1d":"Students, teachers and everyday classroom practice","s3_c2n":"Chamber of Crafts","s3_c2d":"Employers, qualifications, apprenticeships","s3_c3n":"University","s3_c3d":"Research, innovation and new methods","s3_li1":"We do not need to do the same things","s3_li2":"Each partner brings something different","s3_li3":"Knowledge can move between institutions","s3_li4":"Cooperation starts with small shared spaces","s4_title":"Making VET More Attractive","s4_li1":"Better perception of vocational education","s4_li2":"Stronger communication with students and parents","s4_li3":"Practical skills and real career paths","s4_li4":"Closer cooperation with employers","s4_li5":"VET as a modern and ambitious choice","s4_key":"VET should not be seen as a second choice.<br><strong>It is a modern, practical and ambitious route.</strong>","s5_title":"From Project Tasks to a Wider Mission","s5_h1":"We implement the activity plan","s5_l1li1":"Meetings and workshops","s5_l1li2":"Study visits","s5_l1li3":"Reporting and documentation","s5_l1li4":"Partner coordination","s5_h2":"But we want to go further","s5_l2li1":"Results must be visible","s5_l2li2":"Materials must be easy to access","s5_l2li3":"Impact requires communication","s5_l2li4":"Usability is part of sustainability","s6_title":"Making Results Easy to Find and Use","s6_fl1":"Long PDFs","s6_fl2":"Websites","s6_fl3":"Thematic pages","s6_fl4":"Useful for others","s6_li1":"Clear online presence from the beginning","s6_li2":"Practical formats, not only long documents","s6_li3":"Materials for teachers, schools, employers and partners","s6_li4":"Dissemination means making results useful — not just reporting them","s7_title":"Creating Spaces Where Cooperation Can Happen","s7_mp1":"Shared workshops & meetings","s7_mp2":"Study visits & joint training","s7_mp3":"Common materials & tools","s7_mp4":"Relationships first — systems second","s8_title":"AI as a Support Tool, Not the Goal","s8_c1t":"Lesson planning","s8_c1b":"Drafting learning outcomes and lesson structures","s8_c2t":"Communication","s8_c2b":"Supporting clear and effective messaging","s8_c3t":"Document analysis","s8_c3b":"Reviewing long texts and extracting key points","s8_c4t":"Work organisation","s8_c4b":"Helping teachers manage tasks and routines","s8_key":"<strong>AI should support teachers — not replace them.</strong><br><em>Responsible use, in cooperation with higher education.</em>","s9_title":"Teacher Onboarding: A Missing Practical HR Tool","s9_tl1l":"Formal roles already exist","s9_tl1d":"Novice teacher + designated mentor — defined by regulation","s9_tl2l":"Practical tools are often missing","s9_tl2d":"What happens in week one? What should be explained and when?","s9_tl3l":"First weeks are critical","s9_tl3d":"For confidence, retention and integration into school culture","s9_tl4l":"A structured process supports everyone","s9_tl4d":"Novice teacher, mentor and school leadership","s9_tl5l":"A model other schools can adapt","s9_tl5d":"Strong schools need supported teachers","s10_title":"One Logic: Transfer of Knowledge","s10_sub":"What connects networks, AI, onboarding and digital visibility?","s10_f1":"University","s10_t1":"School","s10_f2":"Employers","s10_t2":"Education","s10_f3":"Experienced teachers","s10_t3":"Novice teachers","s10_f4":"Project documents","s10_t4":"Practical, accessible tools","s10_f5":"Isolated actions","s10_t5":"Shared capacity","s11_title":"What We Are Learning","s11_li1":"Cooperation often starts without obvious common ground","s11_li2":"Shared spaces are discovered through practical action","s11_li3":"VET needs visibility, accessibility and strong partnerships","s11_li4":"Small pilots can fill real systemic gaps","s11_li5":"The project can become a platform for further development","s11_pre":"We are not only implementing an activity plan.","s11_rev":"We are building shared spaces where vocational education can become more attractive, practical and visible.","s12_title":"Your Turn","s12_open":"We would love to hear your questions, experiences and insights.<br>What challenges do you face? What has worked in your context?<br>What does real cooperation between institutions look like for you?","s12_hint":"No questions from the floor? Press <kbd>→</kbd> for prepared discussion topics.","s13_label":"Prepared Discussion Topics","s13_title":"Questions for Discussion","s13_q1":"How do you create real cooperation between different institutions?","s13_q2":"How can project results become more accessible and useful beyond the team?","s13_q3":"What makes VET attractive for young people and parents today?","s13_q4":"Which small practical tools can fill important gaps in schools?","s13_disc":"Funded by the European Union. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or the European Education and Culture Executive Agency (EACEA). Neither the European Union nor EACEA can be held responsible for them.","s8_prev_label":"Explore the course","s8_prev_title":"AI in education, organisations and projects — free online course","s9_prev_label":"See the resource","s9_prev_title":"Structural teacher onboarding model — practical tools for schools"},"pl":{"lang_label":"Język","nav_hint":"→ kliknij lub Spacja — dalej · ← wstecz","s1_label":"WIN4SMEs · COVE Polska · Hamburg 2026","s1_title":"Odważne partnerstwa<br>i nowe horyzonty","s1_sub":"Sieci, AI i onboarding nauczycieli<br><em>Doświadczenia COVE Polska w projekcie WIN4SMEs</em>","s1_li1":"Kształcenie zawodowe jako wspólna odpowiedzialność","s1_li2":"Od oddzielnych instytucji do praktycznej współpracy","s1_li3":"Uczynienie kształcenia zawodowego bardziej atrakcyjnym, widocznym i użytecznym","s2_title":"Trudny, ale obiecujący kontekst","s2_sub":"Różne instytucje — jeden wspólny cel","s2_li1":"Szkoła zawodowa","s2_li2":"Izba rzemieślnicza","s2_li3":"Uczelnia","s2_li4":"Pracodawcy i partnerzy lokalni","s2_li5":"Jeden cel — ale różne codzienne realia","s3_title":"Nasze różnice stały się naszą siłą","s3_c1n":"Szkoła zawodowa","s3_c1d":"Uczniowie, nauczyciele i codzienna praktyka szkolna","s3_c2n":"Izba rzemieślnicza","s3_c2d":"Pracodawcy, kwalifikacje, praktyki zawodowe","s3_c3n":"Uczelnia","s3_c3d":"Badania, innowacje i nowe metody","s3_li1":"Nie musimy robić tych samych rzeczy","s3_li2":"Każdy partner wnosi coś innego","s3_li3":"Wiedza może przepływać między instytucjami","s3_li4":"Współpraca zaczyna się od małych wspólnych przestrzeni","s4_title":"Uczynienie kształcenia zawodowego bardziej atrakcyjnym","s4_li1":"Lepsza percepcja kształcenia zawodowego","s4_li2":"Silniejsza komunikacja z uczniami i rodzicami","s4_li3":"Praktyczne umiejętności i realne ścieżki kariery","s4_li4":"Bliższa współpraca z pracodawcami","s4_li5":"Kształcenie zawodowe jako nowoczesny i ambitny wybór","s4_key":"Kształcenie zawodowe nie powinno być postrzegane jako wybór drugiej kategorii.<br><strong>To nowoczesna, praktyczna i ambitna droga.</strong>","s5_title":"Od zadań projektowych do szerszej misji","s5_h1":"Realizujemy plan działań","s5_l1li1":"Spotkania i warsztaty","s5_l1li2":"Wizyty studyjne","s5_l1li3":"Sprawozdawczość i dokumentacja","s5_l1li4":"Koordynacja partnerów","s5_h2":"Ale chcemy iść dalej","s5_l2li1":"Wyniki muszą być widoczne","s5_l2li2":"Materiały muszą być łatwo dostępne","s5_l2li3":"Wpływ wymaga komunikacji","s5_l2li4":"Użyteczność jest częścią trwałości","s6_title":"Uczynienie wyników łatwymi do znalezienia i użycia","s6_fl1":"Długie PDF-y","s6_fl2":"Strony WWW","s6_fl3":"Strony tematyczne","s6_fl4":"Użyteczne dla innych","s6_li1":"Wyraźna obecność online od początku","s6_li2":"Praktyczne formaty, nie tylko długie dokumenty","s6_li3":"Materiały dla nauczycieli, szkół, pracodawców i partnerów","s6_li4":"Upowszechnianie to uczynienie wyników użytecznymi — nie tylko ich raportowanie","s7_title":"Tworzenie przestrzeni, w których może zajść współpraca","s7_mp1":"Wspólne warsztaty i spotkania","s7_mp2":"Wizyty studyjne i wspólne szkolenia","s7_mp3":"Wspólne materiały i narzędzia","s7_mp4":"Najpierw relacje — potem systemy","s8_title":"AI jako narzędzie wsparcia, nie cel","s8_c1t":"Planowanie lekcji","s8_c1b":"Tworzenie efektów uczenia się i struktur lekcji","s8_c2t":"Komunikacja","s8_c2b":"Wspieranie jasnej i skutecznej komunikacji","s8_c3t":"Analiza dokumentów","s8_c3b":"Przeglądanie długich tekstów i wydobywanie kluczowych punktów","s8_c4t":"Organizacja pracy","s8_c4b":"Pomaganie nauczycielom w zarządzaniu zadaniami i rutyną","s8_key":"<strong>AI powinno wspierać nauczycieli — nie zastępować ich.</strong><br><em>Odpowiedzialne użycie, we współpracy z szkolnictwem wyższym.</em>","s9_title":"Onboarding nauczyciela: brakujące praktyczne narzędzie HR","s9_tl1l":"Formalne role już istnieją","s9_tl1d":"Nauczyciel stażysta + wyznaczony mentor — określone przepisami","s9_tl2l":"Praktycznych narzędzi często brakuje","s9_tl2d":"Co dzieje się w pierwszym tygodniu? Co i kiedy należy wyjaśnić?","s9_tl3l":"Pierwsze tygodnie są kluczowe","s9_tl3d":"Dla pewności siebie, utrzymania i integracji z kulturą szkoły","s9_tl4l":"Ustrukturyzowany proces wspiera wszystkich","s9_tl4d":"Nauczyciela stażystę, mentora i kierownictwo szkoły","s9_tl5l":"Model, który mogą adaptować inne szkoły","s9_tl5d":"Silne szkoły potrzebują wspieranych nauczycieli","s10_title":"Jedna logika: transfer wiedzy","s10_sub":"Co łączy sieci, AI, onboarding i widoczność cyfrową?","s10_f1":"Uczelnia","s10_t1":"Szkoła","s10_f2":"Pracodawcy","s10_t2":"Edukacja","s10_f3":"Doświadczeni nauczyciele","s10_t3":"Nauczyciele stażyści","s10_f4":"Dokumenty projektowe","s10_t4":"Praktyczne, dostępne narzędzia","s10_f5":"Izolowane działania","s10_t5":"Wspólna zdolność","s11_title":"Czego się uczymy","s11_li1":"Współpraca często zaczyna się bez oczywistego wspólnego gruntu","s11_li2":"Wspólne przestrzenie odkrywane są przez praktyczne działanie","s11_li3":"Kształcenie zawodowe potrzebuje widoczności, dostępności i silnych partnerstw","s11_li4":"Małe pilotaże mogą wypełniać realne luki systemowe","s11_li5":"Projekt może stać się platformą do dalszego rozwoju","s11_pre":"Nie tylko realizujemy plan działań.","s11_rev":"Budujemy wspólne przestrzenie, w których kształcenie zawodowe może stać się bardziej atrakcyjne, praktyczne i widoczne.","s12_title":"Czas na Was","s12_open":"Chętnie wysłuchamy Waszych pytań, doświadczeń i spostrzeżeń.<br>Jakie wyzwania napotykasz? Co zadziałało w Twoim kontekście?<br>Jak wygląda dla Ciebie prawdziwa współpraca między instytucjami?","s12_hint":"Brak pytań z sali? Naciśnij <kbd>→</kbd>, aby zobaczyć przygotowane tematy dyskusji.","s13_label":"Przygotowane tematy dyskusji","s13_title":"Pytania do dyskusji","s13_q1":"Jak tworzyć prawdziwą współpracę między różnymi instytucjami?","s13_q2":"Jak wyniki projektu mogą stać się bardziej dostępne i użyteczne poza zespołem?","s13_q3":"Co sprawia, że kształcenie zawodowe jest atrakcyjne dla młodych ludzi i rodziców dzisiaj?","s13_q4":"Jakie małe praktyczne narzędzia mogą wypełniać ważne luki w szkołach?","s13_disc":"Finansowane przez Unię Europejską. Wyrażone poglądy i opinie są jednak wyłącznie poglądami i opiniami autora (autorów) i niekoniecznie odzwierciedlają oficjalne stanowisko Unii Europejskiej ani Europejskiej Agencji Wykonawczej ds. Edukacji i Kultury (EACEA). Ani Unia Europejska, ani EACEA nie ponoszą za nie odpowiedzialności.","s8_prev_label":"Przejdź do kursu","s8_prev_title":"AI w edukacji, organizacji i projektach — bezpłatny kurs online","s9_prev_label":"Zobacz zasoby","s9_prev_title":"Strukturalny model wdrażania nauczycieli — praktyczne narzędzia dla szkół"},"de":{"lang_label":"Sprache","nav_hint":"→ Klick oder Leertaste — weiter · ← zurück","s1_label":"WIN4SMEs · COVE Polen · Hamburg 2026","s1_title":"Mutige Partnerschaften<br>und neue Horizonte","s1_sub":"Netzwerke, KI und Lehrer-Onboarding<br><em>Die Erfahrungen von COVE Polen im WIN4SMEs-Projekt</em>","s1_li1":"Berufsbildung als gemeinsame Verantwortung","s1_li2":"Von getrennten Institutionen zur praktischen Zusammenarbeit","s1_li3":"Berufsbildung attraktiver, sichtbarer und nützlicher machen","s2_title":"Ein schwieriger, aber vielversprechender Kontext","s2_sub":"Verschiedene Institutionen — ein gemeinsames Ziel","s2_li1":"Berufsschule","s2_li2":"Handwerkskammer","s2_li3":"Hochschule","s2_li4":"Arbeitgeber und lokale Partner","s2_li5":"Ein Ziel — aber unterschiedliche Alltagsrealitäten","s3_title":"Unsere Unterschiede wurden zu unserer Stärke","s3_c1n":"Berufsschule","s3_c1d":"Schüler, Lehrkräfte und tägliche Unterrichtspraxis","s3_c2n":"Handwerkskammer","s3_c2d":"Arbeitgeber, Qualifikationen, Ausbildungsplätze","s3_c3n":"Hochschule","s3_c3d":"Forschung, Innovation und neue Methoden","s3_li1":"Wir müssen nicht dieselben Dinge tun","s3_li2":"Jeder Partner bringt etwas anderes mit","s3_li3":"Wissen kann zwischen Institutionen fließen","s3_li4":"Zusammenarbeit beginnt mit kleinen gemeinsamen Räumen","s4_title":"Berufsbildung attraktiver machen","s4_li1":"Bessere Wahrnehmung der Berufsbildung","s4_li2":"Stärkere Kommunikation mit Schülern und Eltern","s4_li3":"Praktische Fähigkeiten und echte Karrierewege","s4_li4":"Engere Zusammenarbeit mit Arbeitgebern","s4_li5":"Berufsbildung als moderne und ambitionierte Wahl","s4_key":"Berufsbildung sollte nicht als zweite Wahl gesehen werden.<br><strong>Sie ist ein moderner, praktischer und ehrgeiziger Weg.</strong>","s5_title":"Von Projektaufgaben zu einer umfassenderen Mission","s5_h1":"Wir setzen den Aktivitätsplan um","s5_l1li1":"Treffen und Workshops","s5_l1li2":"Studienbesuche","s5_l1li3":"Berichterstattung und Dokumentation","s5_l1li4":"Partnerkoordination","s5_h2":"Aber wir wollen weiter gehen","s5_l2li1":"Ergebnisse müssen sichtbar sein","s5_l2li2":"Materialien müssen leicht zugänglich sein","s5_l2li3":"Wirkung erfordert Kommunikation","s5_l2li4":"Nutzbarkeit ist Teil der Nachhaltigkeit","s6_title":"Ergebnisse leicht auffindbar und nutzbar machen","s6_fl1":"Lange PDFs","s6_fl2":"Websites","s6_fl3":"Thematische Seiten","s6_fl4":"Nützlich für andere","s6_li1":"Klare Online-Präsenz von Anfang an","s6_li2":"Praktische Formate, nicht nur lange Dokumente","s6_li3":"Materialien für Lehrkräfte, Schulen, Arbeitgeber und Partner","s6_li4":"Verbreitung bedeutet, Ergebnisse nützlich zu machen — nicht nur zu berichten","s7_title":"Räume schaffen, in denen Zusammenarbeit stattfinden kann","s7_mp1":"Gemeinsame Workshops und Treffen","s7_mp2":"Studienbesuche und gemeinsame Schulungen","s7_mp3":"Gemeinsame Materialien und Werkzeuge","s7_mp4":"Zuerst Beziehungen — dann Systeme","s8_title":"KI als Unterstützungswerkzeug, nicht als Ziel","s8_c1t":"Unterrichtsplanung","s8_c1b":"Erstellung von Lernzielen und Unterrichtsstrukturen","s8_c2t":"Kommunikation","s8_c2b":"Unterstützung klarer und effektiver Kommunikation","s8_c3t":"Dokumentenanalyse","s8_c3b":"Durchsicht langer Texte und Extraktion wichtiger Punkte","s8_c4t":"Arbeitsorganisation","s8_c4b":"Lehrkräften bei der Aufgaben- und Routineverwaltung helfen","s8_key":"<strong>KI soll Lehrkräfte unterstützen — nicht ersetzen.</strong><br><em>Verantwortungsvoller Einsatz, in Zusammenarbeit mit der Hochschule.</em>","s9_title":"Lehrer-Onboarding: Ein fehlendes praktisches HR-Instrument","s9_tl1l":"Formale Rollen sind bereits vorhanden","s9_tl1d":"Berufsanfänger + designierter Mentor — per Vorschrift definiert","s9_tl2l":"Praktische Werkzeuge fehlen oft","s9_tl2d":"Was passiert in der ersten Woche? Was soll wann erklärt werden?","s9_tl3l":"Die ersten Wochen sind entscheidend","s9_tl3d":"Für Selbstvertrauen, Verbleib und Integration in die Schulkultur","s9_tl4l":"Ein strukturierter Prozess unterstützt alle","s9_tl4d":"Berufsanfänger, Mentor und Schulleitung","s9_tl5l":"Ein Modell, das andere Schulen anpassen können","s9_tl5d":"Starke Schulen brauchen unterstützte Lehrkräfte","s10_title":"Eine Logik: Wissenstransfer","s10_sub":"Was verbindet Netzwerke, KI, Onboarding und digitale Sichtbarkeit?","s10_f1":"Hochschule","s10_t1":"Schule","s10_f2":"Arbeitgeber","s10_t2":"Bildung","s10_f3":"Erfahrene Lehrkräfte","s10_t3":"Berufsanfänger","s10_f4":"Projektdokumente","s10_t4":"Praktische, zugängliche Werkzeuge","s10_f5":"Isolierte Maßnahmen","s10_t5":"Gemeinsame Kapazität","s11_title":"Was wir lernen","s11_li1":"Zusammenarbeit beginnt oft ohne offensichtliche Gemeinsamkeiten","s11_li2":"Gemeinsame Räume werden durch praktisches Handeln entdeckt","s11_li3":"Berufsbildung braucht Sichtbarkeit, Zugänglichkeit und starke Partnerschaften","s11_li4":"Kleine Pilotprojekte können echte systemische Lücken schließen","s11_li5":"Das Projekt kann eine Plattform für weitere Entwicklung werden","s11_pre":"Wir setzen nicht nur einen Aktivitätsplan um.","s11_rev":"Wir bauen gemeinsame Räume auf, in denen Berufsbildung attraktiver, praktischer und sichtbarer werden kann.","s12_title":"Ihre Runde","s12_open":"Wir freuen uns auf Ihre Fragen, Erfahrungen und Einblicke.<br>Welche Herausforderungen begegnen Ihnen? Was hat in Ihrem Kontext funktioniert?<br>Wie sieht echte institutionelle Zusammenarbeit für Sie aus?","s12_hint":"Keine Fragen aus dem Publikum? Drücken Sie <kbd>→</kbd> für vorbereitete Diskussionsthemen.","s13_label":"Vorbereitete Diskussionsthemen","s13_title":"Fragen zur Diskussion","s13_q1":"Wie schafft man echte Zusammenarbeit zwischen verschiedenen Institutionen?","s13_q2":"Wie können Projektergebnisse über das Team hinaus zugänglicher und nützlicher werden?","s13_q3":"Was macht Berufsbildung für junge Menschen und Eltern heute attraktiv?","s13_q4":"Welche kleinen praktischen Werkzeuge können wichtige Lücken in Schulen schließen?","s13_disc":"Finanziert von der Europäischen Union. Die geäußerten Ansichten und Meinungen entsprechen jedoch ausschließlich denen des Autors bzw. der Autoren und spiegeln nicht zwingend die der Europäischen Union oder der Europäischen Exekutivagentur für Bildung und Kultur (EACEA) wider. Weder die Europäische Union noch die EACEA können dafür verantwortlich gemacht werden.","s8_prev_label":"Zum Kurs","s8_prev_title":"KI in Bildung, Organisationen und Projekten — kostenloser Online-Kurs","s9_prev_label":"Ressource ansehen","s9_prev_title":"Strukturelles Lehrer-Onboarding-Modell — praktische Werkzeuge für Schulen"},"fi":{"lang_label":"Kieli","nav_hint":"→ klikkaa tai Välilyönti — eteenpäin · ← takaisin","s1_label":"WIN4SMEs · COVE Puola · Hamburg 2026","s1_title":"Rohkeita kumppanuuksia<br>ja uusia horisontteja","s1_sub":"Verkostot, tekoäly ja opettajien perehdytys<br><em>COVE Puolan kokemukset WIN4SMEs-projektissa</em>","s1_li1":"Ammatillinen koulutus yhteisenä vastuuna","s1_li2":"Erillisistä instituutioista käytännön yhteistyöhön","s1_li3":"Ammatillisen koulutuksen houkuttelevuuden, näkyvyyden ja hyödyllisyyden parantaminen","s2_title":"Vaikea mutta lupaava konteksti","s2_sub":"Eri instituutiot — yksi yhteinen tavoite","s2_li1":"Ammattikoulu","s2_li2":"Käsityökauppakamari","s2_li3":"Yliopisto","s2_li4":"Työnantajat ja paikalliset kumppanit","s2_li5":"Yksi tavoite — mutta erilaiset arkitodellisuudet","s3_title":"Erilaisuutemme muuttui vahvuudeksemme","s3_c1n":"Ammattikoulu","s3_c1d":"Oppilaat, opettajat ja jokapäiväinen luokkahuonekäytäntö","s3_c2n":"Käsityökauppakamari","s3_c2d":"Työnantajat, pätevyydet, oppisopimukset","s3_c3n":"Yliopisto","s3_c3d":"Tutkimus, innovaatiot ja uudet menetelmät","s3_li1":"Meidän ei tarvitse tehdä samoja asioita","s3_li2":"Jokainen kumppani tuo jotain erilaista","s3_li3":"Tieto voi liikkua instituutioiden välillä","s3_li4":"Yhteistyö alkaa pienistä yhteisistä tiloista","s4_title":"Ammatillisen koulutuksen houkuttelevuuden parantaminen","s4_li1":"Parempi käsitys ammatillisesta koulutuksesta","s4_li2":"Vahvempi viestintä oppilaiden ja vanhempien kanssa","s4_li3":"Käytännön taidot ja todelliset urapolut","s4_li4":"Tiiviimpi yhteistyö työnantajien kanssa","s4_li5":"Ammatillinen koulutus modernina ja kunnianhimoisena valintana","s4_key":"Ammatillista koulutusta ei pidä nähdä toisena vaihtoehtona.<br><strong>Se on moderni, käytännöllinen ja kunnianhimoinen reitti.</strong>","s5_title":"Projektin tehtävistä laajempaan missioon","s5_h1":"Toteutamme toimintasuunnitelman","s5_l1li1":"Kokoukset ja työpajat","s5_l1li2":"Opintovierailut","s5_l1li3":"Raportointi ja dokumentaatio","s5_l1li4":"Kumppanikoordinaatio","s5_h2":"Mutta haluamme mennä pidemmälle","s5_l2li1":"Tulosten on oltava näkyviä","s5_l2li2":"Materiaalien on oltava helposti saatavilla","s5_l2li3":"Vaikutus vaatii viestintää","s5_l2li4":"Käytettävyys on osa kestävyyttä","s6_title":"Tulosten löytämisen ja käytön helpottaminen","s6_fl1":"Pitkät PDF:t","s6_fl2":"Verkkosivustot","s6_fl3":"Temaattiset sivut","s6_fl4":"Hyödyllistä muille","s6_li1":"Selkeä verkkonäkyvyys alusta alkaen","s6_li2":"Käytännölliset formaatit, ei vain pitkiä dokumentteja","s6_li3":"Materiaaleja opettajille, kouluille, työnantajille ja kumppaneille","s6_li4":"Levittäminen tarkoittaa tulosten hyödylliseksi tekemistä — ei vain raportointia","s7_title":"Tilojen luominen, joissa yhteistyö voi tapahtua","s7_mp1":"Yhteiset työpajat ja kokoukset","s7_mp2":"Opintovierailut ja yhteinen koulutus","s7_mp3":"Yhteiset materiaalit ja työkalut","s7_mp4":"Ensin suhteet — sitten järjestelmät","s8_title":"Tekoäly tukityökaluna, ei tavoitteena","s8_c1t":"Tuntisuunnittelu","s8_c1b":"Oppimistulosten ja tuntirakenteiden luonnostelu","s8_c2t":"Viestintä","s8_c2b":"Selkeän ja tehokkaan viestinnän tukeminen","s8_c3t":"Asiakirja-analyysi","s8_c3b":"Pitkien tekstien tarkastelu ja keskeisten kohtien poiminta","s8_c4t":"Työn organisointi","s8_c4b":"Opettajien tehtävien ja rutiinien hallinnassa auttaminen","s8_key":"<strong>Tekoälyn tulee tukea opettajia — ei korvata heitä.</strong><br><em>Vastuullinen käyttö yhteistyössä korkeakoulutuksen kanssa.</em>","s9_title":"Opettajien perehdytys: Puuttuva käytännön HR-työkalu","s9_tl1l":"Muodolliset roolit ovat jo olemassa","s9_tl1d":"Aloitteleva opettaja + nimetty mentori — määritelty asetuksella","s9_tl2l":"Käytännön työkalut puuttuvat usein","s9_tl2d":"Mitä tapahtuu ensimmäisellä viikolla? Mitä pitää selittää ja milloin?","s9_tl3l":"Ensimmäiset viikot ovat ratkaisevia","s9_tl3d":"Luottamuksen, pysyvyyden ja koulukulttuuriin integroitumisen kannalta","s9_tl4l":"Jäsennelty prosessi tukee kaikkia","s9_tl4d":"Aloittelevaa opettajaa, mentoria ja koulun johtoa","s9_tl5l":"Malli, jota muut koulut voivat soveltaa","s9_tl5d":"Vahvat koulut tarvitsevat tuettuja opettajia","s10_title":"Yksi logiikka: Tiedonsiirto","s10_sub":"Mikä yhdistää verkostot, tekoälyn, perehdytyksen ja digitaalisen näkyvyyden?","s10_f1":"Yliopisto","s10_t1":"Koulu","s10_f2":"Työnantajat","s10_t2":"Koulutus","s10_f3":"Kokeneet opettajat","s10_t3":"Aloittelevat opettajat","s10_f4":"Projektin asiakirjat","s10_t4":"Käytännölliset, helposti saatavilla olevat työkalut","s10_f5":"Eristetyt toimet","s10_t5":"Yhteinen kapasiteetti","s11_title":"Mitä opimme","s11_li1":"Yhteistyö alkaa usein ilman ilmeistä yhteistä pohjaa","s11_li2":"Yhteiset tilat löydetään käytännön toiminnan kautta","s11_li3":"Ammatillinen koulutus tarvitsee näkyvyyttä, saavutettavuutta ja vahvoja kumppanuuksia","s11_li4":"Pienet pilottihankkeet voivat täyttää todellisia systeemisiä aukkoja","s11_li5":"Projektista voi tulla alusta jatkokehitykselle","s11_pre":"Emme vain toteuta toimintasuunnitelmaa.","s11_rev":"Rakennamme yhteisiä tiloja, joissa ammatillisesta koulutuksesta voi tulla houkuttelevampaa, käytännöllisempää ja näkyvämpää.","s12_title":"Teidän vuoronne","s12_open":"Haluamme mielellään kuulla kysymyksiänne, kokemuksianne ja näkemyksiänne.<br>Mitä haasteita kohtaatte? Mikä on toiminut teidän kontekstissanne?<br>Miltä todellinen instituutioiden välinen yhteistyö näyttää teille?","s12_hint":"Ei kysymyksiä yleisöltä? Paina <kbd>→</kbd> valmistelluille keskusteluaiheille.","s13_label":"Valmisteltuja keskusteluaiheita","s13_title":"Kysymyksiä keskusteluun","s13_q1":"Kuinka luoda todellinen yhteistyö eri instituutioiden välille?","s13_q2":"Kuinka projektin tuloksista voi tulla helpommin saavutettavia ja hyödyllisiä tiimin ulkopuolella?","s13_q3":"Mikä tekee ammatillisesta koulutuksesta houkuttelevaa nuorille ja vanhemmille tänään?","s13_q4":"Mitkä pienet käytännön työkalut voivat täyttää tärkeitä aukkoja kouluissa?","s13_disc":"Rahoitettu Euroopan unionin toimesta. Esitetyt näkemykset ja mielipiteet ovat kuitenkin yksinomaan tekijän(tekijöiden) omia, eivätkä välttämättä heijasta Euroopan unionin tai Euroopan koulutuksen ja kulttuurin toimeenpanoviraston (EACEA) virallisia kantoja. Euroopan unioni tai EACEA ei ole vastuussa niistä.","s8_prev_label":"Tutustu kurssiin","s8_prev_title":"Tekoäly koulutuksessa, organisaatioissa ja projekteissa — ilmainen verkkokurssi","s9_prev_label":"Katso resurssi","s9_prev_title":"Rakenteellinen opettajien perehdytysmalli — käytännön työkaluja kouluille"},"hu":{"lang_label":"Nyelv","nav_hint":"→ kattintás vagy Szóköz — tovább · ← vissza","s1_label":"WIN4SMEs · COVE Lengyelország · Hamburg 2026","s1_title":"Merész partnerségek<br>és új horizontok","s1_sub":"Hálózatok, MI és pedagógus-beilleszkedés<br><em>A COVE Lengyelország tapasztalatai a WIN4SMEs projektben</em>","s1_li1":"A szakképzés mint közös felelősség","s1_li2":"Az elkülönült intézményektől a gyakorlati együttműködésig","s1_li3":"A szakképzés vonzóbbá, láthatóbbá és hasznosabbá tétele","s2_title":"Nehéz, de ígéretes kontextus","s2_sub":"Különböző intézmények — egy közös cél","s2_li1":"Szakiskola","s2_li2":"Iparoskamara","s2_li3":"Egyetem","s2_li4":"Munkáltatók és helyi partnerek","s2_li5":"Egy cél — de különböző mindennapok","s3_title":"Különbségeink erőforrásunkká váltak","s3_c1n":"Szakiskola","s3_c1d":"Tanulók, tanárok és a mindennapi osztálytermi gyakorlat","s3_c2n":"Iparoskamara","s3_c2d":"Munkáltatók, képesítések, tanulószerződések","s3_c3n":"Egyetem","s3_c3d":"Kutatás, innováció és új módszerek","s3_li1":"Nem kell ugyanazokat a dolgokat csinálnunk","s3_li2":"Minden partner mást hoz","s3_li3":"A tudás átáramolhat az intézmények között","s3_li4":"Az együttműködés kis közös terekkel kezdődik","s4_title":"A szakképzés vonzóbbá tétele","s4_li1":"A szakképzés jobb megítélése","s4_li2":"Erősebb kommunikáció a tanulókkal és szülőkkel","s4_li3":"Gyakorlati készségek és valódi karrierutak","s4_li4":"Szorosabb együttműködés a munkáltatókkal","s4_li5":"A szakképzés mint modern és ambiciózus választás","s4_key":"A szakképzést nem szabad másodlagos lehetőségnek tekinteni.<br><strong>Modern, praktikus és ambiciózus út.</strong>","s5_title":"A projektfeladatoktól a tágabb misszióig","s5_h1":"Megvalósítjuk az aktivitási tervet","s5_l1li1":"Megbeszélések és műhelyek","s5_l1li2":"Tanulmányutak","s5_l1li3":"Jelentéstétel és dokumentáció","s5_l1li4":"Partnerkoordináció","s5_h2":"De tovább akarunk lépni","s5_l2li1":"Az eredményeknek láthatóknak kell lenniük","s5_l2li2":"Az anyagoknak könnyen elérhetőknek kell lenniük","s5_l2li3":"A hatás kommunikációt igényel","s5_l2li4":"A használhatóság a fenntarthatóság része","s6_title":"Az eredmények könnyű megtalálhatóvá és felhasználhatóvá tétele","s6_fl1":"Hosszú PDF-ek","s6_fl2":"Weboldalak","s6_fl3":"Tematikus oldalak","s6_fl4":"Hasznos mások számára","s6_li1":"Egyértelmű online jelenlét a kezdetektől","s6_li2":"Praktikus formátumok, nem csak hosszú dokumentumok","s6_li3":"Anyagok tanároknak, iskoláknak, munkáltatóknak és partnereknek","s6_li4":"A terjesztés az eredmények hasznossá tételét jelenti — nem csak azok bejelentését","s7_title":"Terek létrehozása, ahol az együttműködés megvalósulhat","s7_mp1":"Közös műhelyek és megbeszélések","s7_mp2":"Tanulmányutak és közös képzések","s7_mp3":"Közös anyagok és eszközök","s7_mp4":"Először kapcsolatok — aztán rendszerek","s8_title":"MI mint támogató eszköz, nem cél","s8_c1t":"Óratervezés","s8_c1b":"Tanulási eredmények és órastruktúrák kidolgozása","s8_c2t":"Kommunikáció","s8_c2b":"Az egyértelmű és hatékony kommunikáció támogatása","s8_c3t":"Dokumentumelemzés","s8_c3b":"Hosszú szövegek áttekintése és kulcspontok kiemelése","s8_c4t":"Munkaszervezés","s8_c4b":"Segítség a tanároknak a feladatok és rutinok kezelésében","s8_key":"<strong>Az MI-nek a tanárokat kell támogatnia — nem helyettesítenie.</strong><br><em>Felelős felhasználás, felsőoktatással együttműködve.</em>","s9_title":"Pedagógus-beilleszkedés: Egy hiányzó gyakorlati HR-eszköz","s9_tl1l":"A formális szerepek már léteznek","s9_tl1d":"Kezdő tanár + kijelölt mentor — rendelet által meghatározva","s9_tl2l":"A gyakorlati eszközök gyakran hiányoznak","s9_tl2d":"Mi történik az első héten? Mit kell elmagyarázni és mikor?","s9_tl3l":"Az első hetek kritikusak","s9_tl3d":"Az önbizalom, a megtartás és az iskolai kultúrába való integráció szempontjából","s9_tl4l":"Egy strukturált folyamat mindenkit támogat","s9_tl4d":"A kezdő tanárt, a mentort és az iskolavezetést","s9_tl5l":"Más iskolák által is adaptálható modell","s9_tl5d":"Az erős iskoláknak támogatott tanárokra van szükségük","s10_title":"Egy logika: Tudástranszfer","s10_sub":"Mi köti össze a hálózatokat, az MI-t, a beilleszkedést és a digitális láthatóságot?","s10_f1":"Egyetem","s10_t1":"Iskola","s10_f2":"Munkáltatók","s10_t2":"Oktatás","s10_f3":"Tapasztalt tanárok","s10_t3":"Kezdő tanárok","s10_f4":"Projektdokumentumok","s10_t4":"Praktikus, hozzáférhető eszközök","s10_f5":"Elszigetelt intézkedések","s10_t5":"Közös kapacitás","s11_title":"Amit tanulunk","s11_li1":"Az együttműködés gyakran nyilvánvaló közös alap nélkül kezdődik","s11_li2":"A közös tereket a gyakorlati cselekvés során fedezik fel","s11_li3":"A szakképzésnek láthatóságra, hozzáférhetőségre és erős partnerségekre van szüksége","s11_li4":"A kis pilotok valódi rendszerszintű hiányokat tölthetnek be","s11_li5":"A projekt további fejlődés platformjává válhat","s11_pre":"Nem csak egy aktivitási tervet valósítunk meg.","s11_rev":"Közös tereket építünk, ahol a szakképzés vonzóbbá, praktikusabbá és láthatóbbá válhat.","s12_title":"Önök következnek","s12_open":"Szívesen hallanánk kérdéseiket, tapasztalataikat és meglátásaikat.<br>Milyen kihívásokkal szembesülnek? Mi működött az Ön kontextusában?<br>Hogyan néz ki Önnek a valódi intézményi együttműködés?","s12_hint":"Nincsenek kérdések a közönségből? Nyomja meg a <kbd>→</kbd> gombot az előkészített vitapontokhoz.","s13_label":"Előkészített vitapontok","s13_title":"Kérdések a vitához","s13_q1":"Hogyan hozható létre valódi együttműködés különböző intézmények között?","s13_q2":"Hogyan válhatnak a projekteredmények elérhetőbbé és hasznossabbá a csapaton kívül?","s13_q3":"Mi teszi a szakképzést vonzóvá a fiatalok és szülők számára ma?","s13_q4":"Mely kis gyakorlati eszközök tölthetnek be fontos hiányokat az iskolákban?","s13_disc":"Az Európai Unió finanszírozásával. A kifejtett nézetek és vélemények azonban kizárólag a szerző(k) nézetei, és nem feltétlenül tükrözik az Európai Unió vagy az Európai Oktatási és Kulturális Végrehajtó Ügynökség (EACEA) álláspontját. Sem az Európai Unió, sem az EACEA nem vonható felelősségre értük.","s8_prev_label":"Fedezze fel a tanfolyamot","s8_prev_title":"MI az oktatásban, szervezetekben és projektekben — ingyenes online tanfolyam","s9_prev_label":"Tekintse meg a forrást","s9_prev_title":"Strukturált pedagógus-beilleszkedési modell — gyakorlati eszközök iskoláknak"},"uk":{"lang_label":"Мова","nav_hint":"→ клік або Пробіл — вперед · ← назад","s1_label":"WIN4SMEs · COVE Польща · Гамбург 2026","s1_title":"Сміливі партнерства<br>та нові горизонти","s1_sub":"Мережі, штучний інтелект і введення вчителів<br><em>Досвід COVE Польща у проєкті WIN4SMEs</em>","s1_li1":"Професійна освіта як спільна відповідальність","s1_li2":"Від окремих інституцій до практичної співпраці","s1_li3":"Зробити ПТО більш привабливою, помітною і корисною","s2_title":"Складний, але перспективний контекст","s2_sub":"Різні інституції — одна спільна мета","s2_li1":"Професійна школа","s2_li2":"Ремісnicька палата","s2_li3":"Університет","s2_li4":"Роботодавці та місцеві партнери","s2_li5":"Одна мета — але різні повсякденні реалії","s3_title":"Наші відмінності стали нашою силою","s3_c1n":"Профшкола","s3_c1d":"Учні, вчителі та щоденна класна практика","s3_c2n":"Ремісницька палата","s3_c2d":"Роботодавці, кваліфікації, учнівство","s3_c3n":"Університет","s3_c3d":"Дослідження, інновації та нові методи","s3_li1":"Нам не потрібно робити одне й те саме","s3_li2":"Кожен партнер привносить щось різне","s3_li3":"Знання можуть переходити між інституціями","s3_li4":"Співпраця починається з невеликих спільних просторів","s4_title":"Зробити ПТО більш привабливою","s4_li1":"Краще сприйняття професійної освіти","s4_li2":"Активніша комунікація з учнями та батьками","s4_li3":"Практичні навички та реальні кар'єрні шляхи","s4_li4":"Тісніша співпраця з роботодавцями","s4_li5":"ПТО як сучасний і амбітний вибір","s4_key":"ПТО не повинна вважатися другим вибором.<br><strong>Це сучасний, практичний і амбітний шлях.</strong>","s5_title":"Від проєктних завдань до ширшої місії","s5_h1":"Ми реалізуємо план діяльності","s5_l1li1":"Зустрічі та воркшопи","s5_l1li2":"Навчальні візити","s5_l1li3":"Звітність і документація","s5_l1li4":"Координація партнерів","s5_h2":"Але ми хочемо зробити більше","s5_l2li1":"Результати мають бути видимими","s5_l2li2":"Матеріали мають бути легкодоступними","s5_l2li3":"Вплив потребує комунікації","s5_l2li4":"Зручність — частина стабільності","s6_title":"Зробити результати легкими для пошуку і використання","s6_fl1":"Довгі PDF-файли","s6_fl2":"Веб-сайти","s6_fl3":"Тематичні сторінки","s6_fl4":"Корисно для інших","s6_li1":"Чітка онлайн-присутність з самого початку","s6_li2":"Практичні формати, не лише довгі документи","s6_li3":"Матеріали для вчителів, шкіл, роботодавців і партнерів","s6_li4":"Поширення означає зробити результати корисними — а не лише звітувати про них","s7_title":"Створення просторів, де може відбуватися співпраця","s7_mp1":"Спільні воркшопи та зустрічі","s7_mp2":"Навчальні візити та спільні тренінги","s7_mp3":"Спільні матеріали та інструменти","s7_mp4":"Спочатку стосунки — потім системи","s8_title":"ШІ як інструмент підтримки, а не мета","s8_c1t":"Планування уроків","s8_c1b":"Розробка навчальних результатів і структур уроків","s8_c2t":"Комунікація","s8_c2b":"Підтримка чіткої та ефективної комунікації","s8_c3t":"Аналіз документів","s8_c3b":"Перегляд довгих текстів і виокремлення ключових моментів","s8_c4t":"Організація роботи","s8_c4b":"Допомога вчителям у керуванні завданнями та рутиною","s8_key":"<strong>ШІ має підтримувати вчителів — а не замінювати їх.</strong><br><em>Відповідальне використання у співпраці з вищою освітою.</em>","s9_title":"Введення вчителів: відсутній практичний HR-інструмент","s9_tl1l":"Формальні ролі вже існують","s9_tl1d":"Вчитель-початківець + призначений ментор — визначено регуляцією","s9_tl2l":"Практичних інструментів часто не вистачає","s9_tl2d":"Що відбувається на першому тижні? Що і коли потрібно пояснити?","s9_tl3l":"Перші тижні є критичними","s9_tl3d":"Для впевненості, утримання та інтеграції у шкільну культуру","s9_tl4l":"Структурований процес підтримує всіх","s9_tl4d":"Вчителя-початківця, ментора та шкільне керівництво","s9_tl5l":"Модель, яку можуть адаптувати інші школи","s9_tl5d":"Сильні школи потребують підтримуваних вчителів","s10_title":"Одна логіка: Передача знань","s10_sub":"Що пов'язує мережі, ШІ, введення та цифрову видимість?","s10_f1":"Університет","s10_t1":"Школа","s10_f2":"Роботодавці","s10_t2":"Освіта","s10_f3":"Досвідчені вчителі","s10_t3":"Вчителі-початківці","s10_f4":"Проєктні документи","s10_t4":"Практичні, доступні інструменти","s10_f5":"Ізольовані дії","s10_t5":"Спільний потенціал","s11_title":"Що ми вчимося","s11_li1":"Співпраця часто починається без очевидної спільної основи","s11_li2":"Спільні простори виявляються через практичні дії","s11_li3":"ПТО потребує видимості, доступності та міцного партнерства","s11_li4":"Невеликі пілоти можуть заповнити реальні системні прогалини","s11_li5":"Проєкт може стати платформою для подальшого розвитку","s11_pre":"Ми не лише реалізуємо план діяльності.","s11_rev":"Ми будуємо спільні простори, де ПТО може стати більш привабливою, практичною і помітною.","s12_title":"Ваша черга","s12_open":"Ми із задоволенням почуємо ваші запитання, досвід і думки.<br>З якими викликами ви стикаєтесь? Що спрацювало у вашому контексті?<br>Як виглядає для вас справжня міжінституційна співпраця?","s12_hint":"Немає запитань з залу? Натисніть <kbd>→</kbd> для підготовлених тем дискусії.","s13_label":"Підготовлені теми для дискусії","s13_title":"Питання для обговорення","s13_q1":"Як створити справжню співпрацю між різними інституціями?","s13_q2":"Як результати проєкту можуть стати більш доступними і корисними за межами команди?","s13_q3":"Що робить ПТО привабливою для молоді та батьків сьогодні?","s13_q4":"Які невеликі практичні інструменти можуть заповнити важливі прогалини в школах?","s13_disc":"Фінансується Європейським Союзом. Висловлені погляди та думки є виключно поглядами автора (авторів) і не обов'язково відображають офіційну позицію Європейського Союзу або Європейського виконавчого агентства з освіти та культури (EACEA). Ні Європейський Союз, ні EACEA не несуть за них відповідальності.","s8_prev_label":"Перейти до курсу","s8_prev_title":"ШІ в освіті, організаціях і проєктах — безкоштовний онлайн-курс","s9_prev_label":"Переглянути ресурс","s9_prev_title":"Структурна модель введення вчителів — практичні інструменти для шкіл"},"nl":{"lang_label":"Taal","nav_hint":"→ klik of Spatie — volgende · ← terug","s1_label":"WIN4SMEs · COVE Polen · Hamburg 2026","s1_title":"Gedurfde partnerschappen<br>en nieuwe horizonten","s1_sub":"Netwerken, AI en leraar-onboarding<br><em>De ervaringen van COVE Polen in het WIN4SMEs-project</em>","s1_li1":"Beroepsonderwijs als gedeelde verantwoordelijkheid","s1_li2":"Van afzonderlijke instellingen naar praktische samenwerking","s1_li3":"Beroepsonderwijs aantrekkelijker, zichtbaarder en nuttiger maken","s2_title":"Een moeilijke maar veelbelovende context","s2_sub":"Verschillende instellingen — één gemeenschappelijk doel","s2_li1":"Beroepsschool","s2_li2":"Ambachtskamer","s2_li3":"Universiteit","s2_li4":"Werkgevers en lokale partners","s2_li5":"Één doel — maar verschillende dagelijkse realiteiten","s3_title":"Onze verschillen werden onze kracht","s3_c1n":"Beroepsschool","s3_c1d":"Leerlingen, docenten en dagelijkse klassenpraktijk","s3_c2n":"Ambachtskamer","s3_c2d":"Werkgevers, kwalificaties, leerlingplaatsen","s3_c3n":"Universiteit","s3_c3d":"Onderzoek, innovatie en nieuwe methoden","s3_li1":"We hoeven niet dezelfde dingen te doen","s3_li2":"Elke partner brengt iets anders mee","s3_li3":"Kennis kan tussen instellingen stromen","s3_li4":"Samenwerking begint met kleine gedeelde ruimtes","s4_title":"Beroepsonderwijs aantrekkelijker maken","s4_li1":"Betere perceptie van beroepsonderwijs","s4_li2":"Sterkere communicatie met leerlingen en ouders","s4_li3":"Praktische vaardigheden en echte loopbaanpaden","s4_li4":"Nauwere samenwerking met werkgevers","s4_li5":"Beroepsonderwijs als moderne en ambitieuze keuze","s4_key":"Beroepsonderwijs mag niet worden gezien als een tweede keuze.<br><strong>Het is een moderne, praktische en ambitieuze route.</strong>","s5_title":"Van projecttaken naar een bredere missie","s5_h1":"We voeren het activiteitenplan uit","s5_l1li1":"Vergaderingen en workshops","s5_l1li2":"Studiebezoeken","s5_l1li3":"Rapportage en documentatie","s5_l1li4":"Partnercoördinatie","s5_h2":"Maar we willen verder gaan","s5_l2li1":"Resultaten moeten zichtbaar zijn","s5_l2li2":"Materialen moeten gemakkelijk toegankelijk zijn","s5_l2li3":"Impact vereist communicatie","s5_l2li4":"Bruikbaarheid is onderdeel van duurzaamheid","s6_title":"Resultaten gemakkelijk vindbaar en bruikbaar maken","s6_fl1":"Lange pdf's","s6_fl2":"Websites","s6_fl3":"Thematische pagina's","s6_fl4":"Nuttig voor anderen","s6_li1":"Duidelijke online aanwezigheid vanaf het begin","s6_li2":"Praktische formaten, niet alleen lange documenten","s6_li3":"Materialen voor docenten, scholen, werkgevers en partners","s6_li4":"Verspreiding betekent resultaten nuttig maken — niet alleen rapporteren","s7_title":"Ruimtes creëren waar samenwerking kan plaatsvinden","s7_mp1":"Gedeelde workshops en vergaderingen","s7_mp2":"Studiebezoeken en gezamenlijke trainingen","s7_mp3":"Gemeenschappelijke materialen en tools","s7_mp4":"Eerst relaties — dan systemen","s8_title":"AI als ondersteunend hulpmiddel, niet als doel","s8_c1t":"Lesplanning","s8_c1b":"Opstellen van leerresultaten en lesstructuren","s8_c2t":"Communicatie","s8_c2b":"Ondersteuning van heldere en effectieve communicatie","s8_c3t":"Documentanalyse","s8_c3b":"Beoordeling van lange teksten en extractie van kernpunten","s8_c4t":"Werkorganisatie","s8_c4b":"Docenten helpen bij het beheren van taken en routines","s8_key":"<strong>AI moet docenten ondersteunen — niet vervangen.</strong><br><em>Verantwoord gebruik, in samenwerking met het hoger onderwijs.</em>","s9_title":"Leraar-onboarding: Een ontbrekend praktisch HR-instrument","s9_tl1l":"Formele rollen bestaan al","s9_tl1d":"Beginnende leraar + aangewezen mentor — vastgelegd in regelgeving","s9_tl2l":"Praktische hulpmiddelen ontbreken vaak","s9_tl2d":"Wat gebeurt er in week één? Wat moet worden uitgelegd en wanneer?","s9_tl3l":"De eerste weken zijn kritisch","s9_tl3d":"Voor vertrouwen, behoud en integratie in de schoolcultuur","s9_tl4l":"Een gestructureerd proces ondersteunt iedereen","s9_tl4d":"Beginnende leraar, mentor en schoolleiding","s9_tl5l":"Een model dat andere scholen kunnen aanpassen","s9_tl5d":"Sterke scholen hebben ondersteunde leraren nodig","s10_title":"Één logica: Kennisoverdracht","s10_sub":"Wat verbindt netwerken, AI, onboarding en digitale zichtbaarheid?","s10_f1":"Universiteit","s10_t1":"School","s10_f2":"Werkgevers","s10_t2":"Onderwijs","s10_f3":"Ervaren leraren","s10_t3":"Beginnende leraren","s10_f4":"Projectdocumenten","s10_t4":"Praktische, toegankelijke hulpmiddelen","s10_f5":"Geïsoleerde acties","s10_t5":"Gedeelde capaciteit","s11_title":"Wat we leren","s11_li1":"Samenwerking begint vaak zonder voor de hand liggende gemeenschappelijke basis","s11_li2":"Gedeelde ruimtes worden ontdekt door praktisch handelen","s11_li3":"Beroepsonderwijs heeft zichtbaarheid, toegankelijkheid en sterke partnerschappen nodig","s11_li4":"Kleine pilots kunnen echte systemische lacunes opvullen","s11_li5":"Het project kan een platform worden voor verdere ontwikkeling","s11_pre":"We voeren niet alleen een activiteitenplan uit.","s11_rev":"We bouwen gedeelde ruimtes waar beroepsonderwijs aantrekkelijker, praktischer en zichtbaarder kan worden.","s12_title":"Uw beurt","s12_open":"We horen graag uw vragen, ervaringen en inzichten.<br>Welke uitdagingen ervaart u? Wat heeft er in uw context gewerkt?<br>Hoe ziet echte samenwerking tussen instellingen er voor u uit?","s12_hint":"Geen vragen uit de zaal? Druk op <kbd>→</kbd> voor voorbereide discussiethema's.","s13_label":"Voorbereide discussiethema's","s13_title":"Vragen voor discussie","s13_q1":"Hoe creëer je echte samenwerking tussen verschillende instellingen?","s13_q2":"Hoe kunnen projectresultaten toegankelijker en nuttiger worden buiten het team?","s13_q3":"Wat maakt beroepsonderwijs aantrekkelijk voor jongeren en ouders vandaag?","s13_q4":"Welke kleine praktische hulpmiddelen kunnen belangrijke lacunes in scholen opvullen?","s13_disc":"Gefinancierd door de Europese Unie. De geuite standpunten en meningen zijn echter uitsluitend die van de auteur(s) en weerspiegelen niet noodzakelijk die van de Europese Unie of het Europees Uitvoerend Agentschap voor onderwijs en cultuur (EACEA). Noch de Europese Unie noch EACEA kan hiervoor verantwoordelijk worden gesteld.","s8_prev_label":"Bekijk de cursus","s8_prev_title":"AI in onderwijs, organisaties en projecten — gratis online cursus","s9_prev_label":"Zie de bron","s9_prev_title":"Structureel leraar-onboardingmodel — praktische hulpmiddelen voor scholen"},"da":{"lang_label":"Sprog","nav_hint":"→ klik eller Mellemrum — næste · ← tilbage","s1_label":"WIN4SMEs · COVE Polen · Hamburg 2026","s1_title":"Modige partnerskaber<br>og nye horisonter","s1_sub":"Netværk, AI og læreres introduktion<br><em>COVE Polens erfaringer i WIN4SMEs-projektet</em>","s1_li1":"Erhvervsuddannelse som et fælles ansvar","s1_li2":"Fra separate institutioner til praktisk samarbejde","s1_li3":"At gøre erhvervsuddannelse mere attraktiv, synlig og nyttig","s2_title":"En vanskelig, men lovende kontekst","s2_sub":"Forskellige institutioner — ét fælles mål","s2_li1":"Erhvervsskole","s2_li2":"Håndværkskammer","s2_li3":"Universitet","s2_li4":"Arbejdsgivere og lokale partnere","s2_li5":"Ét mål — men forskellige daglige realiteter","s3_title":"Vores forskelle blev vores styrke","s3_c1n":"Erhvervsskole","s3_c1d":"Elever, lærere og daglig klassepraksis","s3_c2n":"Håndværkskammer","s3_c2d":"Arbejdsgivere, kvalifikationer, lærlingepladser","s3_c3n":"Universitet","s3_c3d":"Forskning, innovation og nye metoder","s3_li1":"Vi behøver ikke gøre de samme ting","s3_li2":"Hver partner bidrager med noget forskelligt","s3_li3":"Viden kan bevæge sig mellem institutioner","s3_li4":"Samarbejde starter med små fælles rum","s4_title":"At gøre erhvervsuddannelse mere attraktiv","s4_li1":"Bedre opfattelse af erhvervsuddannelse","s4_li2":"Stærkere kommunikation med elever og forældre","s4_li3":"Praktiske færdigheder og reelle karriereveje","s4_li4":"Tættere samarbejde med arbejdsgivere","s4_li5":"Erhvervsuddannelse som et moderne og ambitiøst valg","s4_key":"Erhvervsuddannelse bør ikke ses som et andetvalg.<br><strong>Det er en moderne, praktisk og ambitiøs rute.</strong>","s5_title":"Fra projektopgaver til en bredere mission","s5_h1":"Vi implementerer aktivitetsplanen","s5_l1li1":"Møder og workshops","s5_l1li2":"Studiebesøg","s5_l1li3":"Rapportering og dokumentation","s5_l1li4":"Partnerkoordinering","s5_h2":"Men vi vil gå videre","s5_l2li1":"Resultater skal være synlige","s5_l2li2":"Materialer skal være nemme at tilgå","s5_l2li3":"Effekt kræver kommunikation","s5_l2li4":"Brugbarhed er en del af bæredygtighed","s6_title":"At gøre resultater nemme at finde og bruge","s6_fl1":"Lange PDF'er","s6_fl2":"Hjemmesider","s6_fl3":"Tematiske sider","s6_fl4":"Nyttigt for andre","s6_li1":"Klar online tilstedeværelse fra begyndelsen","s6_li2":"Praktiske formater, ikke kun lange dokumenter","s6_li3":"Materialer til lærere, skoler, arbejdsgivere og partnere","s6_li4":"Formidling betyder at gøre resultater nyttige — ikke kun at rapportere dem","s7_title":"At skabe rum, hvor samarbejde kan ske","s7_mp1":"Fælles workshops og møder","s7_mp2":"Studiebesøg og fælles uddannelse","s7_mp3":"Fælles materialer og værktøjer","s7_mp4":"Relationer først — systemer bagefter","s8_title":"AI som støtteværktøj, ikke målet","s8_c1t":"Lektionsplanlægning","s8_c1b":"Udkast til læringsresultater og lektionsstrukturer","s8_c2t":"Kommunikation","s8_c2b":"Støtte til klar og effektiv kommunikation","s8_c3t":"Dokumentanalyse","s8_c3b":"Gennemgang af lange tekster og udtrækning af centrale punkter","s8_c4t":"Arbejdsorganisering","s8_c4b":"Hjælp lærere med at håndtere opgaver og rutiner","s8_key":"<strong>AI bør støtte lærere — ikke erstatte dem.</strong><br><em>Ansvarlig brug i samarbejde med videregående uddannelse.</em>","s9_title":"Læreres introduktion: Et manglende praktisk HR-værktøj","s9_tl1l":"Formelle roller eksisterer allerede","s9_tl1d":"Ny lærer + udpeget mentor — defineret ved regulering","s9_tl2l":"Praktiske værktøjer mangler ofte","s9_tl2d":"Hvad sker der i uge et? Hvad skal forklares og hvornår?","s9_tl3l":"De første uger er kritiske","s9_tl3d":"For selvtillid, fastholdelse og integration i skolekulturen","s9_tl4l":"En struktureret proces støtter alle","s9_tl4d":"Ny lærer, mentor og skoleledelse","s9_tl5l":"En model andre skoler kan tilpasse","s9_tl5d":"Stærke skoler har brug for støttede lærere","s10_title":"Én logik: Vidensoverførsel","s10_sub":"Hvad forbinder netværk, AI, introduktion og digital synlighed?","s10_f1":"Universitet","s10_t1":"Skole","s10_f2":"Arbejdsgivere","s10_t2":"Uddannelse","s10_f3":"Erfarne lærere","s10_t3":"Nye lærere","s10_f4":"Projektdokumenter","s10_t4":"Praktiske, tilgængelige værktøjer","s10_f5":"Isolerede handlinger","s10_t5":"Fælles kapacitet","s11_title":"Hvad vi lærer","s11_li1":"Samarbejde starter ofte uden indlysende fælles grund","s11_li2":"Fælles rum opdages gennem praktisk handling","s11_li3":"Erhvervsuddannelse behøver synlighed, tilgængelighed og stærke partnerskaber","s11_li4":"Små pilotprojekter kan udfylde reelle systemiske huller","s11_li5":"Projektet kan blive en platform for videre udvikling","s11_pre":"Vi implementerer ikke kun en aktivitetsplan.","s11_rev":"Vi bygger fælles rum, hvor erhvervsuddannelse kan blive mere attraktiv, praktisk og synlig.","s12_title":"Jeres tur","s12_open":"Vi vil gerne høre jeres spørgsmål, erfaringer og indsigter.<br>Hvilke udfordringer møder I? Hvad har virket i jeres kontekst?<br>Hvordan ser reel institutionel samarbejde ud for jer?","s12_hint":"Ingen spørgsmål fra salen? Tryk <kbd>→</kbd> for forberedte diskussionsemner.","s13_label":"Forberedte diskussionsemner","s13_title":"Spørgsmål til diskussion","s13_q1":"Hvordan skaber man reelt samarbejde mellem forskellige institutioner?","s13_q2":"Hvordan kan projektresultater blive mere tilgængelige og nyttige uden for teamet?","s13_q3":"Hvad gør erhvervsuddannelse attraktiv for unge og forældre i dag?","s13_q4":"Hvilke små praktiske værktøjer kan udfylde vigtige huller i skoler?","s13_disc":"Finansieret af Den Europæiske Union. De udtrykte synspunkter og meninger er dog udelukkende forfatterens (forfatternes) egne og afspejler ikke nødvendigvis Den Europæiske Unions eller Det Europæiske Uddannelses- og Kultureksekutivagenturs (EACEA) holdninger. Hverken Den Europæiske Union eller EACEA kan holdes ansvarlige herfor.","s8_prev_label":"Se kurset","s8_prev_title":"AI i uddannelse, organisationer og projekter — gratis online kursus","s9_prev_label":"Se ressourcen","s9_prev_title":"Struktureret lærers onboardingmodel — praktiske værktøjer til skoler"},"lt":{"lang_label":"Kalba","nav_hint":"→ spustelėkite arba Tarpas — toliau · ← atgal","s1_label":"WIN4SMEs · COVE Lenkija · Hamburgas 2026","s1_title":"Drąsios partnerystės<br>ir nauji horizontai","s1_sub":"Tinklai, DI ir mokytojų įvedimas<br><em>COVE Lenkija patirtis WIN4SMEs projekte</em>","s1_li1":"Profesinis ugdymas kaip bendra atsakomybė","s1_li2":"Nuo atskirų institucijų iki praktinio bendradarbiavimo","s1_li3":"Profesinį ugdymą padaryti patrauklesnį, matomesnį ir naudingesnį","s2_title":"Sunkus, bet daug žadantis kontekstas","s2_sub":"Skirtingos institucijos — vienas bendras tikslas","s2_li1":"Profesinė mokykla","s2_li2":"Amatų rūmai","s2_li3":"Universitetas","s2_li4":"Darbdaviai ir vietos partneriai","s2_li5":"Vienas tikslas — bet skirtingos kasdienės realijos","s3_title":"Mūsų skirtumai tapo mūsų stiprybe","s3_c1n":"Profesinė mokykla","s3_c1d":"Mokiniai, mokytojai ir kasdienė klasės praktika","s3_c2n":"Amatų rūmai","s3_c2d":"Darbdaviai, kvalifikacijos, mokinystė","s3_c3n":"Universitetas","s3_c3d":"Tyrimai, inovacijos ir nauji metodai","s3_li1":"Mums nereikia daryti tų pačių dalykų","s3_li2":"Kiekvienas partneris atneša kažką skirtingo","s3_li3":"Žinios gali judėti tarp institucijų","s3_li4":"Bendradarbiavimas prasideda nuo mažų bendrų erdvių","s4_title":"Profesinio ugdymo patrauklumo didinimas","s4_li1":"Geresnis profesinio ugdymo suvokimas","s4_li2":"Stipresnis bendravimas su mokiniais ir tėvais","s4_li3":"Praktiniai įgūdžiai ir realūs karjeros keliai","s4_li4":"Glaudesnis bendradarbiavimas su darbdaviais","s4_li5":"Profesinis ugdymas kaip modernus ir ambicingas pasirinkimas","s4_key":"Profesinis ugdymas neturėtų būti laikomas antru pasirinkimu.<br><strong>Tai moderni, praktiška ir ambicinga kryptis.</strong>","s5_title":"Nuo projekto užduočių iki platesnės misijos","s5_h1":"Įgyvendiname veiksmų planą","s5_l1li1":"Susitikimai ir seminarai","s5_l1li2":"Studijų vizitai","s5_l1li3":"Ataskaitų teikimas ir dokumentacija","s5_l1li4":"Partnerių koordinavimas","s5_h2":"Bet norime eiti toliau","s5_l2li1":"Rezultatai turi būti matomi","s5_l2li2":"Medžiagos turi būti lengvai prieinamos","s5_l2li3":"Poveikiui reikia komunikacijos","s5_l2li4":"Naudojamumas yra tvarumo dalis","s6_title":"Rezultatų radimo ir naudojimo palengvinimas","s6_fl1":"Ilgi PDF","s6_fl2":"Svetainės","s6_fl3":"Teminiai puslapiai","s6_fl4":"Naudinga kitiems","s6_li1":"Aiški buvimas internete nuo pat pradžių","s6_li2":"Praktiniai formatai, ne tik ilgi dokumentai","s6_li3":"Medžiaga mokytojams, mokykloms, darbdaviams ir partneriams","s6_li4":"Sklaida reiškia rezultatų naudingumo užtikrinimą — o ne tik jų pranešimą","s7_title":"Erdvių kūrimas, kuriose gali vykti bendradarbiavimas","s7_mp1":"Bendri seminarai ir susitikimai","s7_mp2":"Studijų vizitai ir bendri mokymai","s7_mp3":"Bendra medžiaga ir įrankiai","s7_mp4":"Pirmiausia santykiai — paskui sistemos","s8_title":"DI kaip paramos įrankis, ne tikslas","s8_c1t":"Pamokų planavimas","s8_c1b":"Mokymosi rezultatų ir pamokų struktūrų rengimas","s8_c2t":"Komunikacija","s8_c2b":"Aiškios ir veiksmingos komunikacijos palaikymas","s8_c3t":"Dokumentų analizė","s8_c3b":"Ilgų tekstų peržiūra ir pagrindinių punktų išskyrimas","s8_c4t":"Darbo organizavimas","s8_c4b":"Mokytojų pagalba valdant užduotis ir rutinas","s8_key":"<strong>DI turėtų remti mokytojus — ne juos pakeisti.</strong><br><em>Atsakingas naudojimas bendradarbiaujant su aukštuoju mokslu.</em>","s9_title":"Mokytojų įvedimas: Trūkstamas praktinis personalo valdymo įrankis","s9_tl1l":"Formalūs vaidmenys jau egzistuoja","s9_tl1d":"Pradedantysis mokytojas + paskirtas mentorius — apibrėžta reglamentavimu","s9_tl2l":"Praktinių priemonių dažnai trūksta","s9_tl2d":"Kas vyksta pirmąją savaitę? Ką reikia paaiškinti ir kada?","s9_tl3l":"Pirmosios savaitės yra kritinės","s9_tl3d":"Pasitikėjimui savimi, išlaikymui ir integracijai į mokyklos kultūrą","s9_tl4l":"Struktūrizuotas procesas padeda visiems","s9_tl4d":"Pradedančiajam mokytojui, mentoriui ir mokyklos vadovybei","s9_tl5l":"Modelis, kurį gali pritaikyti kitos mokyklos","s9_tl5d":"Stiprioms mokykloms reikia palaikomų mokytojų","s10_title":"Viena logika: žinių perdavimas","s10_sub":"Kas sieja tinklus, DI, įvedimą ir skaitmeninį matomumą?","s10_f1":"Universitetas","s10_t1":"Mokykla","s10_f2":"Darbdaviai","s10_t2":"Švietimas","s10_f3":"Patyrę mokytojai","s10_t3":"Pradedantieji mokytojai","s10_f4":"Projekto dokumentai","s10_t4":"Praktiniai, prieinami įrankiai","s10_f5":"Izoliuoti veiksmai","s10_t5":"Bendra pajėgumas","s11_title":"Ko mes mokomės","s11_li1":"Bendradarbiavimas dažnai prasideda be akivaizdaus bendro pagrindo","s11_li2":"Bendros erdvės atrandamos per praktinę veiklą","s11_li3":"Profesiniam ugdymui reikia matomumo, prieinamumo ir stiprių partnerysčių","s11_li4":"Maži pilotiniai projektai gali užpildyti realias sistemines spragas","s11_li5":"Projektas gali tapti platforma tolesnei plėtrai","s11_pre":"Mes ne tik įgyvendiname veiksmų planą.","s11_rev":"Mes kuriame bendras erdves, kuriose profesinis ugdymas gali tapti patrauklesnis, praktiškesnis ir matomesnis.","s12_title":"Jūsų eilė","s12_open":"Mielai išklausysime jūsų klausimus, patirtį ir įžvalgas.<br>Su kokiais iššūkiais susiduriate? Kas pasiteisino jūsų kontekste?<br>Kaip jums atrodo tikras institucinis bendradarbiavimas?","s12_hint":"Nėra klausimų iš auditorijos? Paspauskite <kbd>→</kbd> paruoštiems diskusijų klausimams.","s13_label":"Paruošti diskusijų klausimai","s13_title":"Klausimai diskusijai","s13_q1":"Kaip sukurti tikrą bendradarbiavimą tarp skirtingų institucijų?","s13_q2":"Kaip projekto rezultatai gali tapti labiau prieinami ir naudingi už komandos ribų?","s13_q3":"Kas daro profesinį ugdymą patrauklų jaunimui ir tėvams šiandien?","s13_q4":"Kokie maži praktiniai įrankiai gali užpildyti svarbias spragas mokyklose?","s13_disc":"Finansuoja Europos Sąjunga. Išreikštos nuomonės ir požiūriai yra tik autoriaus (-ių) nuomonės ir nebūtinai atspindi Europos Sąjungos arba Europos švietimo ir kultūros vykdomosios įstaigos (EACEA) poziciją. Nei Europos Sąjunga, nei EACEA neatsako už juos.","s8_prev_label":"Peržiūrėti kursą","s8_prev_title":"DI švietime, organizacijose ir projektuose — nemokamas internetinis kursas","s9_prev_label":"Peržiūrėti šaltinį","s9_prev_title":"Struktūrinis mokytojų įvedimo modelis — praktiniai įrankiai mokykloms"}};
+  var SEL = [["#nav-hint","nav_hint","html"],["#slide-1 .section-label","s1_label","text"],["#slide-1 .big-title","s1_title","html"],["#slide-1 .big-sub","s1_sub","html"],["#slide-1 .pt-list li:nth-child(1)","s1_li1","text"],["#slide-1 .pt-list li:nth-child(2)","s1_li2","text"],["#slide-1 .pt-list li:nth-child(3)","s1_li3","text"],["#slide-2 .slide-title","s2_title","text"],["#slide-2 .slide-sub","s2_sub","text"],["#slide-2 .pt-list li:nth-child(1)","s2_li1","text"],["#slide-2 .pt-list li:nth-child(2)","s2_li2","text"],["#slide-2 .pt-list li:nth-child(3)","s2_li3","text"],["#slide-2 .pt-list li:nth-child(4)","s2_li4","text"],["#slide-2 .pt-list li:nth-child(5)","s2_li5","text"],["#slide-3 .slide-title","s3_title","text"],["#slide-3 .inst-card:nth-child(1) .inst-name","s3_c1n","text"],["#slide-3 .inst-card:nth-child(1) .inst-desc","s3_c1d","text"],["#slide-3 .inst-card:nth-child(2) .inst-name","s3_c2n","text"],["#slide-3 .inst-card:nth-child(2) .inst-desc","s3_c2d","text"],["#slide-3 .inst-card:nth-child(3) .inst-name","s3_c3n","text"],["#slide-3 .inst-card:nth-child(3) .inst-desc","s3_c3d","text"],["#slide-3 .pt-list li:nth-child(1)","s3_li1","text"],["#slide-3 .pt-list li:nth-child(2)","s3_li2","text"],["#slide-3 .pt-list li:nth-child(3)","s3_li3","text"],["#slide-3 .pt-list li:nth-child(4)","s3_li4","text"],["#slide-4 .slide-title","s4_title","text"],["#slide-4 .pt-list li:nth-child(1)","s4_li1","text"],["#slide-4 .pt-list li:nth-child(2)","s4_li2","text"],["#slide-4 .pt-list li:nth-child(3)","s4_li3","text"],["#slide-4 .pt-list li:nth-child(4)","s4_li4","text"],["#slide-4 .pt-list li:nth-child(5) .hl-gold","s4_li5","text"],["#slide-4 .key-box","s4_key","html"],["#slide-5 .slide-title","s5_title","text"],["#slide-5 .split-col:nth-child(1) h3","s5_h1","text"],["#slide-5 .split-col:nth-child(1) li:nth-child(1)","s5_l1li1","text"],["#slide-5 .split-col:nth-child(1) li:nth-child(2)","s5_l1li2","text"],["#slide-5 .split-col:nth-child(1) li:nth-child(3)","s5_l1li3","text"],["#slide-5 .split-col:nth-child(1) li:nth-child(4)","s5_l1li4","text"],["#slide-5 .split-col:nth-child(2) h3","s5_h2","text"],["#slide-5 .split-col:nth-child(2) li:nth-child(1)","s5_l2li1","text"],["#slide-5 .split-col:nth-child(2) li:nth-child(2)","s5_l2li2","text"],["#slide-5 .split-col:nth-child(2) li:nth-child(3)","s5_l2li3","text"],["#slide-5 .split-col:nth-child(2) li:nth-child(4)","s5_l2li4","text"],["#slide-6 .slide-title","s6_title","text"],["[data-i18n='s6_fl1']","s6_fl1","text"],["[data-i18n='s6_fl2']","s6_fl2","text"],["[data-i18n='s6_fl3']","s6_fl3","text"],["[data-i18n='s6_fl4']","s6_fl4","text"],["#slide-6 .pt-list li:nth-child(1)","s6_li1","text"],["#slide-6 .pt-list li:nth-child(2)","s6_li2","text"],["#slide-6 .pt-list li:nth-child(3)","s6_li3","text"],["#slide-6 .pt-list li:nth-child(4) .hl-gold","s6_li4","text"],["#slide-7 .slide-title","s7_title","text"],["#slide-7 .mini-pt:nth-child(1)","s7_mp1","text"],["#slide-7 .mini-pt:nth-child(2)","s7_mp2","text"],["#slide-7 .mini-pt:nth-child(3)","s7_mp3","text"],["#slide-7 .mini-pt:nth-child(4)","s7_mp4","text"],["#slide-8 .slide-title","s8_title","text"],["#slide-8 .card:nth-child(1) .card-title","s8_c1t","text"],["#slide-8 .card:nth-child(1) .card-body","s8_c1b","text"],["#slide-8 .card:nth-child(2) .card-title","s8_c2t","text"],["#slide-8 .card:nth-child(2) .card-body","s8_c2b","text"],["#slide-8 .card:nth-child(3) .card-title","s8_c3t","text"],["#slide-8 .card:nth-child(3) .card-body","s8_c3b","text"],["#slide-8 .card:nth-child(4) .card-title","s8_c4t","text"],["#slide-8 .card:nth-child(4) .card-body","s8_c4b","text"],["#slide-8 .key-box","s8_key","html"],["#slide-9 .slide-title","s9_title","text"],["#slide-9 .tl-item:nth-child(1) .tl-label","s9_tl1l","text"],["#slide-9 .tl-item:nth-child(1) .tl-desc","s9_tl1d","text"],["#slide-9 .tl-item:nth-child(2) .tl-label","s9_tl2l","text"],["#slide-9 .tl-item:nth-child(2) .tl-desc","s9_tl2d","text"],["#slide-9 .tl-item:nth-child(3) .tl-label","s9_tl3l","text"],["#slide-9 .tl-item:nth-child(3) .tl-desc","s9_tl3d","text"],["#slide-9 .tl-item:nth-child(4) .tl-label","s9_tl4l","text"],["#slide-9 .tl-item:nth-child(4) .tl-desc","s9_tl4d","text"],["#slide-9 .tl-item:nth-child(5) .tl-label","s9_tl5l","text"],["#slide-9 .tl-item:nth-child(5) .tl-desc","s9_tl5d","text"],["#slide-10 .slide-title","s10_title","text"],["#slide-10 .slide-sub","s10_sub","text"],["#slide-10 .tr-item:nth-child(1) .tr-from","s10_f1","text"],["#slide-10 .tr-item:nth-child(1) .tr-to","s10_t1","text"],["#slide-10 .tr-item:nth-child(2) .tr-from","s10_f2","text"],["#slide-10 .tr-item:nth-child(2) .tr-to","s10_t2","text"],["#slide-10 .tr-item:nth-child(3) .tr-from","s10_f3","text"],["#slide-10 .tr-item:nth-child(3) .tr-to","s10_t3","text"],["#slide-10 .tr-item:nth-child(4) .tr-from","s10_f4","text"],["#slide-10 .tr-item:nth-child(4) .tr-to","s10_t4","text"],["#slide-10 .tr-item:nth-child(5) .tr-from","s10_f5","text"],["#slide-10 .tr-item:nth-child(5) .tr-to","s10_t5","text"],["#slide-11 .slide-title","s11_title","text"],["#slide-11 .pt-list li:nth-child(1)","s11_li1","text"],["#slide-11 .pt-list li:nth-child(2)","s11_li2","text"],["#slide-11 .pt-list li:nth-child(3)","s11_li3","text"],["#slide-11 .pt-list li:nth-child(4)","s11_li4","text"],["#slide-11 .pt-list li:nth-child(5)","s11_li5","text"],["#slide-12 .slide-title","s12_title","text"],["#slide-12 .open-text","s12_open","html"],["#slide-12 .backup-hint","s12_hint","html"],["#slide-13 .section-label","s13_label","text"],["#slide-13 .slide-title","s13_title","text"],["#slide-13 .q-item:nth-child(1) .q-text","s13_q1","text"],["#slide-13 .q-item:nth-child(2) .q-text","s13_q2","text"],["#slide-13 .q-item:nth-child(3) .q-text","s13_q3","text"],["#slide-13 .q-item:nth-child(4) .q-text","s13_q4","text"],["#slide-13 .eu-disclaimer","s13_disc","text"],["#slide-8 .site-preview .site-preview-label","s8_prev_label","text"],["#slide-8 .site-preview .site-preview-title","s8_prev_title","text"],["#slide-9 .site-preview .site-preview-label","s9_prev_label","text"],["#slide-9 .site-preview .site-preview-title","s9_prev_title","text"]];
+  var currentLang = localStorage.getItem('pres_lang') || 'en';
+
+  function applyLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('pres_lang', lang);
+    var t = I18N[lang] || I18N['en'];
+    SEL.forEach(function(entry) {
+      var sel = entry[0], key = entry[1], mode = entry[2];
+      var el = document.querySelector(sel);
+      if (!el || t[key] === undefined) return;
+      if (mode === 'html') { el.innerHTML = t[key]; }
+      else { el.textContent = t[key]; }
+    });
+    /* slide 11 key-box: rebuild krev spans for the second sentence */
+    var kb11 = document.querySelector('#slide-11 .key-box');
+    if (kb11 && t['s11_pre'] && t['s11_rev']) {
+      var words = t['s11_rev'].split(' ');
+      var spans = words.map(function(w,i) {
+        return '<span class="krev" style="--kd:' + i + '">' + w + '</span>';
+      }).join(' ');
+      kb11.innerHTML = t['s11_pre'] + '<br><strong>' + spans + '</strong>';
+    }
+    /* update html lang attribute */
+    document.documentElement.lang = lang;
+    /* update switcher selection */
+    var sel2 = document.getElementById('lang-select');
+    if (sel2) sel2.value = lang;
+  }
+
+  var langSel = document.getElementById('lang-select');
+  if (langSel) {
+    langSel.addEventListener('change', function() { applyLang(this.value); });
+    applyLang(currentLang);
+  }
+
+})();
+</script>
+</body>
+</html>
